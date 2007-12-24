@@ -1,0 +1,116 @@
+<html>
+	<head>
+		<title>Specification Report for SpecUnit</title>
+	<body>
+		<h3>SpecUnit</h3>
+<h4>Console, when given a valid assembly file path</h4>
+<ul>
+	<li>should write the spec report for the assembly indicated by the file path</li>
+</ul><h4>Console, when no arguments are provided</h4>
+<ul>
+	<li>should display an error message</li>
+</ul><h4>Console, when there is no assembly that corresponds to the assembly name provided as a console argument</h4>
+<ul>
+	<li>should display an error message</li>
+</ul><h4>Context, when a context class has test methods</h4>
+<ul>
+	<li>should provide the test methods as specifications</li>
+</ul><h4>Context, when assigning a test concern to a test class</h4>
+<ul>
+	<li>should indicate that it has a concern</li>
+	<li>should have a concern name that is the name specified by the context's concern attribute</li>
+	<li>the context name should be prefixed with the concern</li>
+</ul><h4>Context, when creating a context for a type that has underscores in its name</h4>
+<ul>
+	<li>should remove the underscores</li>
+</ul><h4>Context, when creating a context for a type that is not a test fixture</h4>
+<ul>
+	<li>should fail</li>
+</ul><h4>Context, when not assigning a test concern to a test class</h4>
+<ul>
+	<li>should indicate that it does not have a concern</li>
+	<li>should not have a concern name</li>
+	<li>should not have a context name that includes a concern</li>
+</ul><h4>Context, when two contexts represent the same test fixture</h4>
+<ul>
+	<li>should be equal</li>
+</ul><h4>ReportGenerator, when rendering a context</h4>
+<ul>
+	<li>should render the name as an H4</li>
+	<li>should render specifications as a bulletted list</li>
+</ul><h4>ReportGenerator, when writing the spec report for an assembly</h4>
+<ul>
+	<li>should write an html file named after the assembly that the report is created for</li>
+</ul><h4>Specification, when a method has a test fixture attribute</h4>
+<ul>
+	<li>should be a test method</li>
+</ul><h4>Specification, when a specification name contains "if"</h4>
+<ul>
+	<li>should add a warning to the specification name indicating that the specification may be a context</li>
+</ul><h4>Specification, when a specification name contains "when"</h4>
+<ul>
+	<li>should add a warning to the specification name indicating that the specification may be a context</li>
+</ul><h4>SpecificationDataset, when creating a dataset for an assembly</h4>
+<ul>
+	<li>should be named for the file stem of the name of the assembly</li>
+</ul><h4>SpecificationDataset, when selecting context classes from a list of types</h4>
+<ul>
+	<li>should ignore abstract types</li>
+	<li>should include concrete classes with the TestFixture attribute</li>
+</ul><h4>SpecificationDataset, when selecting context classes from a list of types where the types are not from the same assembly</h4>
+<ul>
+	<li>should fail</li>
+</ul><h4>SpecificationDataset, when selecting context classes from an assembly</h4>
+<ul>
+	<li>should include concrete classes with the TestFixture attribute</li>
+</ul><h4>SpecificationDataset, when sorting contexts by context name</h4>
+<ul>
+	<li>should place the first context at the beginning of the list of contexts</li>
+	<li>should place the last context at the end of the list of contexts</li>
+</ul><h4>SpecificationExtensions, when expressing assertions as BDD style extension methods</h4>
+<ul>
+	<li>should allow "ShouldBeFalse" to be used in place of "Assert IsFalse"</li>
+	<li>should allow "ShouldBeTrue" to be used in place of "Assert IsTrue"</li>
+	<li>should allow "ShouldEqual" to be used in place of "Assert AreEqual"</li>
+	<li>should allow "ShouldNotEqual" to be used in place of "Assert AreNotEqual"</li>
+	<li>should allow "ShouldBeNull" to be used in place of "Assert IsNull"</li>
+	<li>should allow "ShouldNotBeNull" to be used in place of "Assert IsNotNull"</li>
+	<li>should allow "ShouldBeTheSameAs" to be used in place of "Assert AreSame"</li>
+	<li>should allow "ShouldNotBeTheSameAs" to be used in place of Assert AreNotSame</li>
+	<li>should allow "ShouldBeOfType" to be used in place of "Assert IsInstanceOfType"</li>
+	<li>should allow "ShouldNotBeOfType" to be used in place of "Assert IsNotInstanceOfType"</li>
+	<li>should allow "ShouldContain" to be used in place of "Assert Contains"</li>
+	<li>should allow "ShouldNotContain" to be used in place of "Assert NotContains"</li>
+	<li>should allow "ShouldBeEmpty" to be used on a collection in place of "Assert IsEmpty"</li>
+	<li>should allow "ShouldBeEmpty" to be used on a string in place of "Assert IsEmpty"</li>
+	<li>should allow "ShouldNotBeEmpty" to be used on a string in place of "Assert IsNotEmpty"</li>
+	<li>should allow "ShouldNotBeEmpty" to be used on a collection in place of "Assert IsNotEmpty"</li>
+	<li>should allow "ShouldBeGreaterThan" to be used in place of "Assert Greater"</li>
+	<li>should allow "ShouldBeLessThan" to be used in place of "Assert Less"</li>
+	<li>should allow "ShouldContain" to be used in place of "StringAssert Contains"</li>
+	<li>should allow "ShouldBeEqualIgnoringCase" to be used in place of "StringAssert AreEqualIgnoringCase"</li>
+	<li>should allow "ShouldEndWith" to be used in place of "StringAssert EndsWith"</li>
+	<li>should allow "ShouldStartWith" to be used in place of "StringAssert StartsWith"</li>
+	<li>should allow "ShouldBeThrownBy" to be used in place of "ExpectedExceptionAttribute"</li>
+	<li>should allow "ShouldContainErrorMessage" to be used on an exception in place of "StringAssert Contains"</li>
+</ul><h4>SpecificationExtensions, when the ShouldBeThrownBy assertion is not satisfied</h4>
+<ul>
+	<li>should fail the test</li>
+</ul><h4>SpecificationName, when the name has a leading underscore</h4>
+<ul>
+	<li>should replace underscores spaces</li>
+</ul><h4>SpecificationName, when the name has a trailing underscore</h4>
+<ul>
+	<li>should replace underscores spaces</li>
+</ul><h4>SpecificationName, when the name has an underscore followed by an "S" followed by an underscore</h4>
+<ul>
+	<li>should replace it with appostrophy "S"</li>
+</ul><h4>SpecificationName, when the name has two consecutive underscores</h4>
+<ul>
+	<li>should replace the underscores with a quotation mark</li>
+</ul><h4>SpecificationName, when the name has underscores</h4>
+<ul>
+	<li>should replace underscores spaces</li>
+</ul>
+	</body>
+</html>

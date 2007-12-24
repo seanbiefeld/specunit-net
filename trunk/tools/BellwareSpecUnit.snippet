@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets
+    xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+
+  <!--Context Class-->
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>
+        SpecUnit Context Class
+      </Title>
+      <Shortcut>ctx</Shortcut>
+    </Header>
+    <Snippet>
+      <Declarations>
+        <Literal>
+          <ID>concern</ID>
+          <ToolTip>Concern</ToolTip>
+          <Default>concern</Default>
+        </Literal>
+        <Literal>
+          <ID>context</ID>
+          <ToolTip>Conext Name</ToolTip>
+          <Default>context</Default>
+        </Literal>
+      </Declarations>
+      <Code Language="CSharp">
+        <![CDATA[[Concern(typeof($concern$))]
+        [TestFixture]
+        public class when_$context$
+        {
+          $end$
+        }]]>
+      </Code>
+    </Snippet>
+  </CodeSnippet>
+
+  <!--Concern Attribute-->
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>
+        SpecUnit Concern Attribute
+      </Title>
+      <Shortcut>ca</Shortcut>
+    </Header>
+    <Snippet>
+      <Declarations>
+        <Literal>
+          <ID>concern</ID>
+          <ToolTip>Concern</ToolTip>
+          <Default>concern</Default>
+        </Literal>
+      </Declarations>
+      <Code Language="CSharp">
+        <![CDATA[[Concern(typeof($concern$))]]]>
+      </Code>
+    </Snippet>
+  </CodeSnippet>
+
+  <!--Specification Method-->
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>
+        SpecUnit Specification Method
+      </Title>
+      <Shortcut>spec</Shortcut>
+    </Header>
+    <Snippet>
+      <Declarations>
+        <Literal>
+          <ID>specification</ID>
+          <ToolTip>Specification</ToolTip>
+          <Default>observation</Default>
+        </Literal>
+      </Declarations>
+      <Code Language="CSharp">
+        <![CDATA[[Test]
+        public void should_$specification$()
+        {
+          $end$
+        }]]>
+      </Code>
+    </Snippet>
+  </CodeSnippet>
+
+  <!--Establish Context SetUp Method-->
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>
+        SpecUnit SetUp Method
+      </Title>
+      <Shortcut>ec</Shortcut>
+    </Header>
+    <Snippet>
+      <Code Language="CSharp">
+        <![CDATA[protected override void Context()
+        {
+          $end$
+        }]]>
+      </Code>
+    </Snippet>
+  </CodeSnippet>
+
+  <!--Because Method-->
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>
+        SpecUnit Because
+      </Title>
+      <Shortcut>bc</Shortcut>
+    </Header>
+    <Snippet>
+      <Declarations>
+        <Literal>
+          <ID>reason</ID>
+          <ToolTip>Reason</ToolTip>
+          <Default>reason</Default>
+        </Literal>
+      </Declarations>
+      <Code Language="CSharp">
+        <![CDATA[protected override void Because(/* $reason$ */)
+        {
+          $end$
+        }]]>
+      </Code>
+    </Snippet>
+  </CodeSnippet>
+
+  <!--ContextSpecification-->
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>
+        ContextSpecification
+      </Title>
+      <Shortcut>cs</Shortcut>
+    </Header>
+    <Snippet>
+      <Code Language="CSharp">
+        <![CDATA[: ContextSpecification]]>
+      </Code>
+    </Snippet>
+  </CodeSnippet>
+
+</CodeSnippets>

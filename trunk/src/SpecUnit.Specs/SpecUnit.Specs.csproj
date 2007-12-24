@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{892B965D-1CBD-4CC7-94F1-BC605AAA0D41}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SpecUnit.Specs</RootNamespace>
+    <AssemblyName>SpecUnit.Specs</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="nunit.framework, Version=2.4.5.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.Mocks, Version=3.3.0.906, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Rhino.Mocks.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ConsoleSpecs.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ContextSpecs.cs" />
+    <Compile Include="SpecificationDatasetSpecs.cs" />
+    <Compile Include="SpecificationExtensionsSpecs .cs" />
+    <Compile Include="SpecificationNameSpecs.cs" />
+    <Compile Include="ReportGeneratorSpecs.cs" />
+    <Compile Include="SpecificationSpecs.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SpecUnit.Report\SpecUnit.Report.csproj">
+      <Project>{CF5E3274-CDF3-4491-95C8-A298E5E5D245}</Project>
+      <Name>SpecUnit.Report</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SpecUnit.Specs.AssemblyUnderTest\SpecUnit.Specs.AssemblyUnderTest.csproj">
+      <Project>{1466E65A-1C30-4BBD-96CB-D36D1BAAAAC6}</Project>
+      <Name>SpecUnit.Specs.AssemblyUnderTest</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SpecUnit\SpecUnit.csproj">
+      <Project>{2117F3B4-5691-4E87-9F0A-00D10F531755}</Project>
+      <Name>SpecUnit</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
