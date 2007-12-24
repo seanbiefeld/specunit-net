@@ -1,0 +1,39 @@
+Imports System
+Imports System.Windows.Forms
+Imports EnvDTE
+Imports EnvDTE80
+Imports System.Diagnostics
+
+Public Module CodeEditor
+
+    Sub ReplaceSpacesInTestNameWithUnderscores()
+
+        If DTE.ActiveDocument Is Nothing Then Return
+        Dim wrCS As Boolean = DTE.Properties("TextEditor", "CSharp").Item("WordWrap").Value
+
+        Try
+            DTE.Properties("TextEditor", "CSharp").Item("WordWrap").Value = False
+            Dim selection As TextSelection = CType(DTE.ActiveDocument.Selection(), EnvDTE.TextSelection)
+            Dim index As Integer
+
+            selection.SelectLine()
+            If selection.Text = "" Then Return
+
+            Dim methodIndex As Integer = selection.Text.IndexOf("public void ")
+            Dim classIndex As Integer = selection.Text.IndexOf("public class ")
+
+            index = CType(IIf(methodIndex >= 0, methodIndex, classIndex), Integer)
+
+            Dim prefix As String = CType(IIf(methodIndex >= 0, "public void ", "public class "), String)
+            prefix = selection.Text.Substring(0, index) + prefix
+            Dim description As String = selection.Text.Replace(prefix, String.Empty).Trim
+            selection.Text = prefix + description.Replace(" ", "_").Replace("'", "_") + vbCrLf
+            selection.LineDown()
+            selection.EndOfLine()
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        Finally
+            DTE.Properties("TextEditor", "CSharp").Item("WordWrap").Value = wrCS
+        End Try
+    End Sub
+End Module
