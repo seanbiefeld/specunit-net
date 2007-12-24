@@ -44,7 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractFixture.cs" />
-    <Compile Include="A_fixture.cs.cs" />
+    <Compile Include="A_fixture.cs" />
     <Compile Include="SomeConcern.cs" />
     <Compile Include="Context_with_concern.cs" />
     <Compile Include="EmptyFixture.cs" />
