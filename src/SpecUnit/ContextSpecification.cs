@@ -2,7 +2,7 @@
 
 namespace SpecUnit
 {
-	[TestFixture]
+    //[TestFixture]
 	public abstract class ContextSpecification
 	{
 		[TestFixtureSetUp]
