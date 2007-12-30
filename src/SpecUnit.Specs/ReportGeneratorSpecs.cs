@@ -31,7 +31,7 @@ namespace SpecUnit.Specs
 		[Observation]
 		public void should_render_the_count_of_contexts_and_specifications()
 		{
-			ReportGenerator.RenderConcernHeader(_concern).ShouldContain("[2 context(s), 4 specification(s)]");
+			ReportGenerator.RenderConcernHeader(_concern).ShouldContain("2 context(s), 4 specification(s)");
 		}
 
 		[Test]
@@ -63,7 +63,7 @@ namespace SpecUnit.Specs
 		[Observation]
 		public void should_render_the_count_of_specifications_in_the_header()
 		{
-			ReportGenerator.RenderContextHeader(_context).ShouldContain("[2 specification(s)]");
+			ReportGenerator.RenderContextHeader(_context).ShouldContain("2 specification(s)");
 		}
 
 		[Observation]
@@ -96,7 +96,7 @@ namespace SpecUnit.Specs
 		[Observation]
 		public void should_render_the_count_of_specifications_in_the_header()
 		{
-			ReportGenerator.RenderContextHeader(_context).ShouldContain("[2 specification(s)]");
+			ReportGenerator.RenderContextHeader(_context).ShouldContain("2 specification(s)");
 		}
 
 		[Observation]
