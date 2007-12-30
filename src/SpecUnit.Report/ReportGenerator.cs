@@ -31,7 +31,7 @@ namespace SpecUnit.Report
 			int contextCount = specificationDataset.Concerns.Sum(c => c.Contexts.Length);
 			int specificationCount = specificationDataset.Concerns.Sum(c => c.Contexts.Sum(ctx => ctx.Specifications.Length));
 
-			string title = String.Format("<h1>{0}&nbsp;&nbsp;<span class=\"count\" style=\"color: LightGrey;\">[{1} concern(s), {2} context(s), {3} specification(s)</span></h1>\n", specificationDataset.GetName(), specificationDataset.Concerns.Length, contextCount, specificationCount);
+			string title = String.Format("<h1>{0}&nbsp;&nbsp;<span class=\"count\">[{1} concern(s), {2} context(s), {3} specification(s)</span></h1>\n\n", specificationDataset.GetName(), specificationDataset.Concerns.Length, contextCount, specificationCount);
 			reportBuilder.Append(title);
 			RenderHR(reportBuilder);
 		}
@@ -55,7 +55,7 @@ namespace SpecUnit.Report
 			StringBuilder reportBuilder = new StringBuilder();
 
 			string concernHeader = RenderConcernHeader(concern);
-			concernHeader = String.Format("{0}\n", concernHeader);
+			concernHeader = String.Format("{0}\n\n", concernHeader);
 			reportBuilder.Append(concernHeader);
 
 			RenderContexts(concern.Contexts, reportBuilder);
@@ -67,7 +67,7 @@ namespace SpecUnit.Report
 
 		private static void RenderHR(StringBuilder reportBuilder)
 		{
-			string hr = "\n<hr>\n\n";
+			string hr = "<hr>\n\n";
 			reportBuilder.Append(hr);
 		}
 
@@ -75,7 +75,7 @@ namespace SpecUnit.Report
 		{
 			int specificationCount = concern.Contexts.Sum(c => c.Specifications.Length);
 
-			return String.Format("<h2 class=\"concern\">{0} specifications&nbsp;&nbsp;<span class=\"count\" style=\"color: LightGrey;\">[{1} context(s), {2} specification(s)]</span></h2>", concern.Name, concern.Contexts.Length, specificationCount);
+			return String.Format("<h2 class=\"concern\">{0} specifications&nbsp;&nbsp;<span class=\"count\">[{1} context(s), {2} specification(s)]</span></h2>", concern.Name, concern.Contexts.Length, specificationCount);
 		}
 
 		private static void RenderContexts(Context[] contexts, StringBuilder reportBuilder)
@@ -93,7 +93,7 @@ namespace SpecUnit.Report
 
 		public static string RenderContextHeader(Context context)
 		{
-			return String.Format("<h3 class=\"context\">{0}&nbsp;&nbsp;<span class=\"count\" style=\"color: LightGrey;\">[{1} specification(s)]</span></h3>", context.Name, context.Specifications.Length);
+			return String.Format("<h3 class=\"context\">{0}&nbsp;&nbsp;<span class=\"count\">[{1} specification(s)]</span></h3>", context.Name, context.Specifications.Length);
 		}
 
 		public static string RenderSpecificationList(Specification[] specifications)
@@ -114,6 +114,23 @@ namespace SpecUnit.Report
 			string template = @"<html>
 	<head>
 		<title>Specification Report for {0}</title>
+		<style type=""text/css"">
+			body {{
+				font-family: Arial,Helvetica,sans-serif;
+				font-size: .9em;
+			}}
+
+			.count {{
+				color: LightGrey;
+			}}
+
+			hr {{
+				color: LightGrey;
+				border: 1px solid LightGrey;
+				height: 1px;
+			}}
+		</style>
+	</head>
 	<body>
 		{1}
 	</body>
