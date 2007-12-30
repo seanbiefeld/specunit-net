@@ -20,7 +20,7 @@ namespace SpecUnit.Specs
 		}
 
 		[Observation]
-		public void should_replace_underscores_spaces()
+		public void should_replace_underscores_with_spaces()
 		{
 			_specificationName.ShouldEqual("replace underscores with spaces");
 		}
@@ -43,7 +43,7 @@ namespace SpecUnit.Specs
 		}
 
 		[Observation]
-		public void should_replace_underscores_spaces()
+		public void should_replace_underscores_with_spaces()
 		{
 			_specificationName.ShouldEqual("starts with underscore");
 		}
@@ -66,7 +66,7 @@ namespace SpecUnit.Specs
 		}
 
 		[Observation]
-		public void should_replace_underscores_spaces()
+		public void should_replace_underscores_with_spaces()
 		{
 			_specificationName.ShouldEqual("ends with underscore");
 		}

@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConsoleSpecs.cs" />
+    <Compile Include="ConcernSpecs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ContextSpecs.cs" />
     <Compile Include="SpecificationDatasetSpecs.cs" />

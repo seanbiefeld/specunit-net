@@ -115,14 +115,26 @@ namespace SpecUnit
 			return expected;
 		}
 
+		public static void ShouldStartWith(this string actual, string expected)
+		{
+			StringAssert.StartsWith(expected, actual);
+		}
+
 		public static void ShouldEndWith(this string actual, string expected)
 		{
 			StringAssert.EndsWith(expected, actual);
 		}
 
-		public static void ShouldStartWith(this string actual, string expected)
+		public static void ShouldBeSurroundedWith(this string actual, string expectedStartDelimiter, string expectedEndDelimiter)
 		{
-			StringAssert.StartsWith(expected, actual);
+			StringAssert.StartsWith(expectedStartDelimiter, actual);
+			StringAssert.EndsWith(expectedEndDelimiter, actual);
+		}
+
+		public static void ShouldBeSurroundedWith(this string actual, string expectedDelimiter)
+		{
+			StringAssert.StartsWith(expectedDelimiter, actual);
+			StringAssert.EndsWith(expectedDelimiter, actual);
 		}
 
 		public static void ShouldContainErrorMessage(this Exception exception, string expected)
@@ -132,6 +144,16 @@ namespace SpecUnit
 
 		public static Exception ShouldBeThrownBy(this Type exceptionType, MethodThatThrows method)
 		{
+			Exception exception = method.GetException();
+
+			Assert.IsNotNull(exception);
+			Assert.AreEqual(exceptionType, exception.GetType());
+
+			return exception;
+		}
+
+		public static Exception GetException(this MethodThatThrows method)
+		{
 			Exception exception = null;
 
 			try
@@ -140,13 +162,7 @@ namespace SpecUnit
 			}
 			catch (Exception e)
 			{
-				Assert.AreEqual(exceptionType, e.GetType());
 				exception = e;
-			}
-
-			if (exception == null)
-			{
-				Assert.Fail(String.Format("Expected {0} to be thrown.", exceptionType.FullName));
 			}
 
 			return exception;

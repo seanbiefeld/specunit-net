@@ -30,26 +30,51 @@ namespace SpecUnit.Specs
 		}
 	}
 
+	[TestFixture]
 	[Concern(typeof(SpecificationDataset))]
-	public class when_selecting_context_classes_from_an_assembly : ContextSpecification
+	public class when_building_a_dataset_for_an_assembly : ContextSpecification
+	{
+		private SpecificationDataset _specificationDataset;
+		private Assembly _assemblyUnderTest;
+
+		protected override void Context()
+		{
+			_assemblyUnderTest = typeof(A_fixture).Assembly;
+		}
+
+		protected override void Because()
+		{
+			_specificationDataset = SpecificationDataset.Build(_assemblyUnderTest);
+		}
+
+		[Test]
+		[Observation]
+		public void should_collect_and_build_the_assembly_s_concerns()
+		{
+			_specificationDataset.Concerns.Length.ShouldBeGreaterThan(0);
+		}
+	}
+
+	[Concern(typeof(SpecificationDataset))]
+	public class when_collecting_concserns_from_an_assembly : ContextSpecification
 	{
 		private SpecificationDataset _specificationDataset;
 
 		protected override void Context()
 		{
-			Assembly assemblyUnderTest = typeof(A_fixture).Assembly;
+			Assembly assemblyUnderTest = typeof(Context_with_concern).Assembly;
 			_specificationDataset = new SpecificationDataset(assemblyUnderTest);
 		}
 
-		protected override void Because(/* SpecUnit.Specs.AssemblyUnderTest has concrete test classes */)
+		protected override void Because( /* there are three classes in the assembly with two unique concerns */ )
 		{
-			_specificationDataset.BuildSpecificationClasses();
+			_specificationDataset.BuildConcerns();
 		}
 
 		[Observation]
-		public void should_include_concrete_classes_with_the_TestFixture_attribute()
+		public void should_include_one_concern_for_each_unique_concern_found()
 		{
-			_specificationDataset.Contexts.Length.ShouldEqual(7);
+			_specificationDataset.Concerns.Length.ShouldEqual(2);
 		}
 	}
 
@@ -75,9 +100,9 @@ namespace SpecUnit.Specs
 			_sourceTypes = types.ToArray();
 		}
 
-		protected override void Because(/* not all types are selected */)
+		protected override void Because(/* not all types are test fixtures */)
 		{
-			_datasetTypes = SpecificationDataset.GetConcreteTestFixtureTypes(_sourceTypes);
+			_datasetTypes = _sourceTypes.GetConcreteTestFixtureTypes();
 		}
 
 		[Observation]
@@ -90,62 +115,6 @@ namespace SpecUnit.Specs
 		public void should_include_concrete_classes_with_the_TestFixture_attribute()
 		{
 			_datasetTypes[0].ShouldEqual(typeof(A_fixture));
-		}
-	}
-
-	[Concern(typeof(SpecificationDataset))]
-	public class when_selecting_context_classes_from_a_list_of_types_where_the_types_are_not_from_the_same_assembly : ContextSpecification
-	{
-		private List<Type> types;
-
-		protected override void Context()
-		{
-			types = new List<Type>();
-			types.Add(typeof(A_fixture));
-		}
-
-		protected override void Because(/* System.Object is not a member of the same assembly as A_fixture */)
-		{
-			types.Add(typeof(Object));
-		}
-
-		[Observation]
-		public void should_fail()
-		{
-			typeof(ArgumentException).ShouldBeThrownBy(delegate
-				{
-					SpecificationDataset.GetConcreteTestFixtureTypes(types.ToArray());
-				});
-		}
-	}
-
-	[Concern(typeof(SpecificationDataset))]
-	[TestFixture]
-	public class when_sorting_contexts_by_context_name : ContextSpecification
-	{
-		private SpecificationDataset _SpecificationDataset;
-
-		protected override void Context()
-		{
-			Assembly assemblyUnderTest = Assembly.Load("SpecUnit.Specs.AssemblyUnderTest");
-			_SpecificationDataset = new SpecificationDataset(assemblyUnderTest);
-		}
-
-		protected override void Because()
-		{
-			_SpecificationDataset.BuildSpecificationClasses();
-		}
-
-		[Observation]
-		public void should_place_the_first_context_at_the_beginning_of_the_list_of_contexts()
-		{
-			_SpecificationDataset.Contexts[0].Name.ShouldBeLessThan(_SpecificationDataset.Contexts[1].Name);
-		}
-
-		[Observation]
-		public void should_place_the_last_context_at_the_end_of_the_list_of_contexts()
-		{
-			_SpecificationDataset.Contexts[_SpecificationDataset.Contexts.Length - 1].Name.ShouldBeGreaterThan(_SpecificationDataset.Contexts[_SpecificationDataset.Contexts.Length - 2].Name);
 		}
 	}
 }
