@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Linq;
 using NUnit.Framework;
 
 namespace SpecUnit.Report
@@ -8,6 +9,7 @@ namespace SpecUnit.Report
 	public class Context : SpecificationName, IEquatable<Context>
 	{
 		private readonly Type _testFixtureType;
+		private readonly List<Specification> _specifications = new List<Specification>();
 
 		public Type TestFixtureType
 		{
@@ -16,28 +18,54 @@ namespace SpecUnit.Report
 
 		public string Name
 		{
-			get
-			{
-				return GetName();
-			}
+			get { return GetName(); }
 		}
 
 		public string ConcernName
 		{
-			get
+			get { return _testFixtureType.GetConcernName(); }
+		}
+
+		public Specification[] Specifications
+		{
+			get { return _specifications.ToArray(); }
+		}
+
+		public Context(Type type)
+		{
+			AssertIsTestFixture(type);
+
+			_testFixtureType = type;
+		}
+
+		private void AssertIsTestFixture(Type type)
+		{
+			if (type.IsTestFixture() == false)
 			{
-				return GetConcernName();
+				throw new ArgumentException(String.Format("{0} is not a test fixture.", type.Name));
 			}
 		}
 
-		public Context(Type testFixtureType)
+		public static Context Build(Type testFixtureType)
 		{
-			if (IsTestFixture(testFixtureType) == false)
-			{
-				throw new ArgumentException(String.Format("{0} is not a test fixture.", testFixtureType.Name));
-			}
+			Context context = new Context(testFixtureType);
 
-			_testFixtureType = testFixtureType;
+			context.BuildSpecifications();
+
+			return context;
+		}
+
+		private void BuildSpecifications()
+		{
+			MethodInfo[] methods = _testFixtureType.GetMethods();
+
+			foreach (MethodInfo method in methods)
+			{
+				if (method.IsTestMethod())
+				{
+					AddSpecificationFor(method);
+				}
+			}
 		}
 
 		private string GetName()
@@ -46,7 +74,7 @@ namespace SpecUnit.Report
 
 			name = GetName(name);
 
-			string concernName = GetConcernName();
+			string concernName = _testFixtureType.GetConcernName();
 			if (concernName != null)
 			{
 				name = concernName + ", " + name;
@@ -55,50 +83,15 @@ namespace SpecUnit.Report
 			return name;
 		}
 
-		private string GetConcernName()
-		{
-			bool do_not_look_for_attribute_on_base_types = true;
-
-			object[] attributes = _testFixtureType.GetCustomAttributes(typeof(ConcernAttribute), do_not_look_for_attribute_on_base_types);
-
-			if (attributes.Length == 0)
-			{
-				return null;
-			}
-
-			ConcernAttribute concernAttribute = (ConcernAttribute)attributes[0];
-
-			return concernAttribute.Name;
-		}
-
-		public static bool IsTestFixture(Type type)
-		{
-			bool do_not_look_for_attribute_on_base_types = true;
-			return type.GetCustomAttributes(typeof(TestFixtureAttribute), do_not_look_for_attribute_on_base_types).Length != 0;
-		}
-
 		public static bool HasConcern(Type type)
 		{
-			bool look_for_attribute_on_base_types = false;
-			return type.GetCustomAttributes(typeof(ConcernAttribute), look_for_attribute_on_base_types).Length != 0;
+			return type.HasConcern();
 		}
 
-		public Specification[] GetSpecifications()
+		private void AddSpecificationFor(MethodInfo method)
 		{
-			List<Specification> specifications = new List<Specification>();
-
-			MethodInfo[] methods = _testFixtureType.GetMethods();
-
-			foreach (MethodInfo method in methods)
-			{
-				if (Specification.IsTestMethod(method))
-				{
-					Specification specification = new Specification(method.Name);
-					specifications.Add(specification);
-				}
-			}
-
-			return specifications.ToArray();
+			Specification specification = new Specification(method.Name);
+			_specifications.Add(specification);
 		}
 
 		public override bool Equals(object obj)
@@ -109,6 +102,25 @@ namespace SpecUnit.Report
 		public bool Equals(Context other)
 		{
 			return this._testFixtureType == other.TestFixtureType;
+		}
+
+		private void AddSpecification(Specification specification)
+		{
+			_specifications.Add(specification);
+		}
+
+		public bool HasSpecificationFor(string testCaseName)
+		{
+			return _specifications.Count(s => s.TestCaseName == testCaseName) != 0;
+		}
+	}
+
+	public static class ContextEntensions
+	{
+		public static bool IsTestFixture(this Type type)
+		{
+			bool do_not_look_for_attribute_on_base_types = true;
+			return type.GetCustomAttributes(typeof(TestFixtureAttribute), do_not_look_for_attribute_on_base_types).Length != 0;
 		}
 	}
 }

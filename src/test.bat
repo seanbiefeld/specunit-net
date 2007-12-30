@@ -1,1 +1,1 @@
-..\tools\nunit\nunit-console SpecUnit.Specs\bin\Debug\SpecUnit.Specs.dll /nologo /labels
+..\tools\nunit\nunit-console SpecUnit.Specs\bin\Debug\SpecUnit.Specs.dll /nologo

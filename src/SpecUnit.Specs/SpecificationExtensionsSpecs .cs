@@ -158,15 +158,27 @@ namespace SpecUnit.Specs
 		}
 
 		[Specification]
+		public void should_allow__ShouldStartWith__to_be_used_in_place_of__StringAssert_StartsWith__()
+		{
+			"some string".ShouldStartWith("so");
+		}
+
+		[Specification]
 		public void should_allow__ShouldEndWith__to_be_used_in_place_of__StringAssert_EndsWith__()
 		{
 			"some string".ShouldEndWith("ng");
 		}
 
 		[Specification]
-		public void should_allow__ShouldStartWith__to_be_used_in_place_of__StringAssert_StartsWith__()
+		public void should_allow__ShouldBeSurroundedWith__to_be_used_in_place_of__StringAssert_StartsWith__and__StringAssert_EndsWith__()
 		{
-			"some string".ShouldStartWith("so");
+			"!some string/!".ShouldBeSurroundedWith("!", "/!");
+		}
+
+		[Specification]
+		public void should_allow__ShouldBeSurroundedWith__with_a_single_delimiter_to_be_used_in_place_of__StringAssert_StartsWith__and__StringAssert_EndsWith__()
+		{
+			"!some string!".ShouldBeSurroundedWith("!");
 		}
 
 		[Specification]
@@ -186,6 +198,27 @@ namespace SpecUnit.Specs
 		}
 	}
 
+	[Concern(typeof(SpecificationExtensions), "GetException extention")]
+	public class when_throwing_an_exception_from_a_delegate
+	{
+		private MethodThatThrows _method;
+		private Exception _exception;
+
+		[Context]
+		public void Context()
+		{
+			_method = delegate { throw new ApplicationException(); };
+
+			_exception = _method.GetException();
+		}
+
+		[Observation]
+		public void should_observation()
+		{
+			_exception.ShouldBeOfType(typeof (ApplicationException));
+		}
+	}
+
 	[Concern(typeof(SpecificationExtensions))]
 	public class when_the_ShouldBeThrownBy_assertion_is_not_satisfied
 	{
@@ -193,7 +226,7 @@ namespace SpecUnit.Specs
 		[Specification]
 		public void should_fail_the_test()
 		{
-			typeof(ApplicationException).ShouldBeThrownBy(delegate { });
+			typeof(ApplicationException).ShouldBeThrownBy(delegate { var i = 0; });
 		}
 	}
 }

@@ -2,7 +2,6 @@
 
 namespace SpecUnit
 {
-    //[TestFixture]
 	public abstract class ContextSpecification
 	{
 		[TestFixtureSetUp]
@@ -29,6 +28,16 @@ namespace SpecUnit
 		{
 			Because_After();
 			CleanUpContext();
+		}
+
+		protected void Pending()
+		{
+			Assert.Ignore();
+		}
+
+		protected void Pending(string message)
+		{
+			Assert.Ignore(message);
 		}
 
 		protected virtual void Context() { }

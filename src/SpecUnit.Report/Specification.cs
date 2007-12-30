@@ -36,6 +36,15 @@ namespace SpecUnit.Report
 
 		public static bool IsTestMethod(MethodInfo method)
 		{
+//			return method.GetCustomAttributes(typeof(TestAttribute), false).Length != 0;
+			return method.IsTestMethod();
+		}
+	}
+
+	public static class SpecificationExtensions
+	{
+		public static bool IsTestMethod(this MethodInfo method)
+		{
 			return method.GetCustomAttributes(typeof(TestAttribute), false).Length != 0;
 		}
 	}

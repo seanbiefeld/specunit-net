@@ -11,6 +11,7 @@ namespace SpecUnit.Report
 	{
 		private readonly Assembly _assembly;
 		private Context[] _contexts = new Context[0];
+		private List<Concern> _concerns = new List<Concern>();
 
 		public Assembly Assembly
 		{
@@ -20,6 +21,11 @@ namespace SpecUnit.Report
 		public Context[] Contexts
 		{
 			get { return _contexts; }
+		}
+
+		public Concern[] Concerns
+		{
+			get { return _concerns.ToArray(); }
 		}
 
 		public SpecificationDataset(Assembly assembly)
@@ -36,9 +42,33 @@ namespace SpecUnit.Report
 			return assemblyName.Substring(0, endPosition);
 		}
 
-		public void BuildSpecificationClasses()
+		public void BuildConcerns()
 		{
-			Type[] testFixtureTypes = GetConcreteTestFixtureTypes(_assembly.GetTypes());
+			Type[] testFixtureTypes = _assembly.GetTypes().GetConcreteTestFixtureTypes();
+
+			foreach (Type testFixtureType in testFixtureTypes)
+			{
+				if (testFixtureType.HasConcern())
+				{
+					Concern concern =
+						(from c in _concerns
+						where c.Name == testFixtureType.GetConcernName()
+						select c).FirstOrDefault();
+
+					if (concern == null)
+					{
+						concern = new Concern(testFixtureType.GetConcernName());
+						_concerns.Add(concern);
+					}
+
+					concern.AddContextFor(testFixtureType);
+				}
+			}
+		}
+
+		public void BuildContexts()
+		{
+			Type[] testFixtureTypes = _assembly.GetTypes().GetConcreteTestFixtureTypes();
 
 			List<Context> contexts = new List<Context>();
 			foreach (Type testFixtureType in testFixtureTypes)
@@ -49,8 +79,8 @@ namespace SpecUnit.Report
 
 			_contexts =
 				(from c in contexts
-				orderby c.Name
-				select c).ToArray();
+				 orderby c.Name
+				 select c).ToArray();
 		}
 
 		public static Type[] GetConcreteTestFixtureTypes(Type[] types)
@@ -61,11 +91,6 @@ namespace SpecUnit.Report
 
 			foreach (Type type in types)
 			{
-				if (type.Assembly != baseAssembly)
-				{
-					throw new ArgumentException(String.Format("{0} is not a member of the {1} base assembly.", type.Name, baseAssembly.GetName().Name));
-				}
-
 				if (type.IsAbstract == false && TypeHasTestFixtureAttribute(type))
 				{
 					testFixtureTypes.Add(type);
@@ -81,5 +106,37 @@ namespace SpecUnit.Report
 			return type.GetCustomAttributes(typeof(TestFixtureAttribute), look_for_attribute_on_base_types).Length != 0;
 		}
 
+		public static SpecificationDataset Build(Assembly assemblyUnderTest)
+		{
+			SpecificationDataset specificationDataset = new SpecificationDataset(assemblyUnderTest);
+			specificationDataset.BuildConcerns();
+			return specificationDataset;
+		}
+	}
+
+	public static class SpecificationDatasetExtensions
+	{
+		public static Type[] GetConcreteTestFixtureTypes(this Type[] types)
+		{
+			List<Type> testFixtureTypes = new List<Type>();
+
+			Assembly baseAssembly = types[0].Assembly;
+
+			foreach (Type type in types)
+			{
+				if (type.IsAbstract == false && TypeHasTestFixtureAttribute(type))
+				{
+					testFixtureTypes.Add(type);
+				}
+			}
+
+			return testFixtureTypes.ToArray();
+		}
+
+		private static bool TypeHasTestFixtureAttribute(Type type)
+		{
+			bool look_for_attribute_on_base_types = true;
+			return type.GetCustomAttributes(typeof(TestFixtureAttribute), look_for_attribute_on_base_types).Length != 0;
+		}
 	}
 }

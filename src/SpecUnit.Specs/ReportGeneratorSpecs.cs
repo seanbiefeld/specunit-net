@@ -7,20 +7,63 @@ using SpecUnit.Specs.AssemblyUnderTest;
 
 namespace SpecUnit.Specs
 {
+	[TestFixture]
 	[Concern(typeof(ReportGenerator))]
-	public class when_rendering_a_context : ContextSpecification
+	public class when_rendering_a_concern : ContextSpecification
+	{
+		private Concern _concern;
+
+		protected override void Context()
+		{
+			_concern = new Concern(typeof(SomeConcern));
+			_concern.AddContextFor(typeof(Context_with_concern));
+			_concern.AddContextFor(typeof(Context_with_same_concern));
+		}
+
+		[Test]
+		[Observation]
+		public void should_render_the_name_in_an_H2()
+		{
+			ReportGenerator.RenderConcernHeader(_concern).ShouldBeSurroundedWith("<h2", "</h2>");
+		}
+
+		[Test]
+		[Observation]
+		public void should_render_the_count_of_contexts_and_specifications()
+		{
+			ReportGenerator.RenderConcernHeader(_concern).ShouldContain("[2 context(s), 4 specification(s)]");
+		}
+
+		[Test]
+		[Observation]
+		public void should_render_its_contexts()
+		{
+			ReportGenerator.RenderConcern(_concern).ShouldContain("Context with concern");
+		}
+	}
+
+	[TestFixture]
+	[Concern(typeof(ReportGenerator))]
+	public class when_rendering_the_context_for_a_concern : ContextSpecification
 	{
 		private Context _context;
 
 		protected override void Context()
 		{
-			_context = new Context(typeof(TestFixture));
+			_context = SpecUnit.Report.Context.Build(typeof(TestFixture));
 		}
 
 		[Observation]
-		public void should_render_the_name_as_an_H4()
+		public void should_render_the_name_in_an_H3()
 		{
-			ReportGenerator.RenderSpecificationClassHeader(_context).ShouldEqual("<h4>TestFixture</h4>");
+			ReportGenerator.RenderContextHeader(_context).ShouldBeSurroundedWith("<h3", "</h3>");
+		}
+
+		[Test]
+		[Observation]
+		public void should_render_the_count_of_specifications_in_the_header()
+		{
+			ReportGenerator.RenderContextHeader(_context).ShouldContain("[2 specification(s)]");
 		}
 
 		[Observation]
@@ -28,7 +71,40 @@ namespace SpecUnit.Specs
 		{
 			string expectedText = "<ul>\n\t<li>TestCase1</li>\n\t<li>TestCase2</li>\n</ul>";
 
-			ReportGenerator.RenderSpecificationList(_context.GetSpecifications()).ShouldEqual(expectedText);
+			ReportGenerator.RenderSpecificationList(_context.Specifications).ShouldContain(expectedText);
+		}
+	}
+
+	[TestFixture]
+	[Concern(typeof(ReportGenerator))]
+	public class when_rendering_a_context : ContextSpecification
+	{
+		private Context _context;
+
+		protected override void Context()
+		{
+			_context = SpecUnit.Report.Context.Build(typeof(TestFixture));
+		}
+
+		[Observation]
+		public void should_render_the_name_in_an_H3()
+		{
+			ReportGenerator.RenderContextHeader(_context).ShouldBeSurroundedWith("<h3", "</h3>");
+		}
+
+		[Test]
+		[Observation]
+		public void should_render_the_count_of_specifications_in_the_header()
+		{
+			ReportGenerator.RenderContextHeader(_context).ShouldContain("[2 specification(s)]");
+		}
+
+		[Observation]
+		public void should_render_specifications_as_a_bulletted_list()
+		{
+			string expectedText = "<ul>\n\t<li>TestCase1</li>\n\t<li>TestCase2</li>\n</ul>";
+
+			ReportGenerator.RenderSpecificationList(_context.Specifications).ShouldContain(expectedText);
 		}
 	}
 

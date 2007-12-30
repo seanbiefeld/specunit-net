@@ -55,6 +55,35 @@ namespace SpecUnit.Specs
 		}
 	}
 
+	[TestFixture]
+	[Concern(typeof(Context))]
+	public class when_building_a_context_for_a_type : ContextSpecification
+	{
+		private Context _context;
+
+		protected override void Context()
+		{
+			_context = SpecUnit.Report.Context.Build(typeof(Context_with_concern));
+		}
+
+		[Test]
+		[Observation]
+		public void should_collect_and_build_the_specifications()
+		{
+			_context.Specifications.Length.ShouldEqual(3);
+		}
+
+		[Test]
+		[Observation]
+		public void should_create_a_specification_for_each_test_method_in_the_type()
+		{
+			_context.HasSpecificationFor("should_jump").ShouldBeTrue();
+			_context.HasSpecificationFor("should_jump_when_I_say_how_high").ShouldBeTrue();
+			_context.HasSpecificationFor("should_jump_if_I_say_how_high").ShouldBeTrue();
+		}
+
+	}
+
 	[Concern(typeof(Context))]
 	public class when_creating_a_context_for_a_type_that_is_not_a_test_fixture : ContextSpecification
 	{
@@ -85,23 +114,6 @@ namespace SpecUnit.Specs
 		public void should_remove_the_underscores()
 		{
 			_context.Name.ShouldEqual("Test fixture with underscores");
-		}
-	}
-
-	[Concern(typeof(Context))]
-	public class when_a_context_class_has_test_methods : ContextSpecification
-	{
-		private Context _context;
-
-		protected override void Context()
-		{
-			_context = new Context(typeof(TestFixture));
-		}
-
-		[Observation]
-		public void should_provide_the_test_methods_as_specifications()
-		{
-			_context.GetSpecifications().Length.ShouldEqual(2);
 		}
 	}
 
