@@ -25,10 +25,8 @@
       </Declarations>
       <Code Language="CSharp">
         <![CDATA[[Concern(typeof($concern$))]
-        [TestFixture]
-        public class when_$context$
+        public class when_$context$$end$
         {
-          $end$
         }]]>
       </Code>
     </Snippet>
@@ -56,7 +54,48 @@
     </Snippet>
   </CodeSnippet>
 
-  <!--Specification Method-->
+  <!--Observation Method (see also: specification method-->
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>
+        SpecUnit Observation Method
+      </Title>
+      <Shortcut>obs</Shortcut>
+    </Header>
+    <Snippet>
+      <Declarations>
+        <Literal>
+          <ID>observation</ID>
+          <ToolTip>Observation</ToolTip>
+          <Default>observation</Default>
+        </Literal>
+      </Declarations>
+      <Code Language="CSharp">
+        <![CDATA[[Observation]
+        public void should_$observation$()
+        {
+          $end$
+        }]]>
+      </Code>
+    </Snippet>
+  </CodeSnippet>
+
+  <!--Observation Attribute-->
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>
+        SpecUnit Observation Attribute
+      </Title>
+      <Shortcut>oa</Shortcut>
+    </Header>
+    <Snippet>
+      <Code Language="CSharp">
+        <![CDATA[[Observation]]]>
+      </Code>
+    </Snippet>
+  </CodeSnippet>
+
+  <!--Specification Method (see also: observation method-->
   <CodeSnippet Format="1.0.0">
     <Header>
       <Title>
@@ -69,11 +108,11 @@
         <Literal>
           <ID>specification</ID>
           <ToolTip>Specification</ToolTip>
-          <Default>observation</Default>
+          <Default>specification</Default>
         </Literal>
       </Declarations>
       <Code Language="CSharp">
-        <![CDATA[[Test]
+        <![CDATA[[Specification]
         public void should_$specification$()
         {
           $end$
@@ -82,7 +121,22 @@
     </Snippet>
   </CodeSnippet>
 
-  <!--Establish Context SetUp Method-->
+  <!--Observation Attribute-->
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>
+        SpecUnit Specification Attribute
+      </Title>
+      <Shortcut>sa</Shortcut>
+    </Header>
+    <Snippet>
+      <Code Language="CSharp">
+        <![CDATA[[Specification]]]>
+      </Code>
+    </Snippet>
+  </CodeSnippet>
+
+  <!--Context SetUp Method-->
   <CodeSnippet Format="1.0.0">
     <Header>
       <Title>
@@ -96,6 +150,21 @@
         {
           $end$
         }]]>
+      </Code>
+    </Snippet>
+  </CodeSnippet>
+
+  <!--Context Attribute-->
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>
+        SpecUnit Context Attribute
+      </Title>
+      <Shortcut>xa</Shortcut>
+    </Header>
+    <Snippet>
+      <Code Language="CSharp">
+        <![CDATA[[Context]]]>
       </Code>
     </Snippet>
   </CodeSnippet>
