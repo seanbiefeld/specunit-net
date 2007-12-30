@@ -31,7 +31,7 @@ namespace SpecUnit.Report
 			int contextCount = specificationDataset.Concerns.Sum(c => c.Contexts.Length);
 			int specificationCount = specificationDataset.Concerns.Sum(c => c.Contexts.Sum(ctx => ctx.Specifications.Length));
 
-			string title = String.Format("<h1>{0}&nbsp;&nbsp;<span class=\"count\">[{1} concern(s), {2} context(s), {3} specification(s)</span></h1>\n\n", specificationDataset.GetName(), specificationDataset.Concerns.Length, contextCount, specificationCount);
+			string title = String.Format("<h1>{0}&nbsp;&nbsp;&nbsp;&nbsp;<span class=\"count\">{1} concern(s), {2} context(s), {3} specification(s)</span></h1>\n\n", specificationDataset.GetName(), specificationDataset.Concerns.Length, contextCount, specificationCount);
 			reportBuilder.Append(title);
 			RenderHR(reportBuilder);
 		}
@@ -75,7 +75,7 @@ namespace SpecUnit.Report
 		{
 			int specificationCount = concern.Contexts.Sum(c => c.Specifications.Length);
 
-			return String.Format("<h2 class=\"concern\">{0} specifications&nbsp;&nbsp;<span class=\"count\">[{1} context(s), {2} specification(s)]</span></h2>", concern.Name, concern.Contexts.Length, specificationCount);
+			return String.Format("<h2 class=\"concern\">{0} specifications&nbsp;&nbsp;&nbsp;&nbsp;<span class=\"count\">{1} context(s), {2} specification(s)</span></h2>", concern.Name, concern.Contexts.Length, specificationCount);
 		}
 
 		private static void RenderContexts(Context[] contexts, StringBuilder reportBuilder)
@@ -93,7 +93,7 @@ namespace SpecUnit.Report
 
 		public static string RenderContextHeader(Context context)
 		{
-			return String.Format("<h3 class=\"context\">{0}&nbsp;&nbsp;<span class=\"count\">[{1} specification(s)]</span></h3>", context.Name, context.Specifications.Length);
+			return String.Format("<h3 class=\"context\">{0}&nbsp;&nbsp;&nbsp;&nbsp;<span class=\"count\">{1} specification(s)</span></h3>", context.Name, context.Specifications.Length);
 		}
 
 		public static string RenderSpecificationList(Specification[] specifications)
