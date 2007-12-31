@@ -8,6 +8,25 @@ namespace SpecUnit.Report
 {
 	public class ReportGenerator
 	{
+		public virtual void WriteReport(Assembly assemblyUnderTest)
+		{
+			SpecificationDataset specificationDataset = SpecificationDataset.Build(assemblyUnderTest);
+
+			string generatedReport = Render(specificationDataset);
+
+			string reportFilePath = assemblyUnderTest.GetName().Name + ".html";
+
+			if (File.Exists(reportFilePath))
+			{
+				File.Delete(reportFilePath);
+			}
+
+			TextWriter tw = new StreamWriter(reportFilePath);
+
+			tw.Write(generatedReport);
+			tw.Close();
+		}
+
 		public static string Render(SpecificationDataset specificationDataset)
 		{
 			StringBuilder reportBuilder = new StringBuilder();
@@ -28,12 +47,20 @@ namespace SpecUnit.Report
 
 		private static void RenderTitle(SpecificationDataset specificationDataset, StringBuilder reportBuilder)
 		{
-			int contextCount = specificationDataset.Concerns.Sum(c => c.Contexts.Length);
-			int specificationCount = specificationDataset.Concerns.Sum(c => c.Contexts.Sum(ctx => ctx.Specifications.Length));
+			string concernsCaption = ConcernsCaption(specificationDataset.Concerns);
+			string contextsCaption = ContextsCaption(specificationDataset.Concerns);
+			string specificationsCaption = SpecificationsCaption(specificationDataset.Concerns);
 
-			string title = String.Format("<h1>{0}&nbsp;&nbsp;&nbsp;&nbsp;<span class=\"count\">{1} concern(s), {2} context(s), {3} specification(s)</span></h1>\n\n", specificationDataset.GetName(), specificationDataset.Concerns.Length, contextCount, specificationCount);
+			string title = String.Format("<h1>{0}&nbsp;&nbsp;&nbsp;&nbsp;<span class=\"count\">{1}, {2}, {3}</span></h1>\n\n", specificationDataset.GetName(), concernsCaption, contextsCaption, specificationsCaption);
 			reportBuilder.Append(title);
 			RenderHR(reportBuilder);
+		}
+
+		public static string RenderTitle(SpecificationDataset specificationDataset)
+		{
+			StringBuilder reportBuilder = new StringBuilder();
+			RenderTitle(specificationDataset, reportBuilder);
+			return reportBuilder.ToString();
 		}
 
 		private static void RenderConcerns(Concern[] concerns, StringBuilder reportBuilder)
@@ -65,17 +92,12 @@ namespace SpecUnit.Report
 			return reportBuilder.ToString();
 		}
 
-		private static void RenderHR(StringBuilder reportBuilder)
-		{
-			string hr = "<hr>\n\n";
-			reportBuilder.Append(hr);
-		}
-
 		public static string RenderConcernHeader(Concern concern)
 		{
-			int specificationCount = concern.Contexts.Sum(c => c.Specifications.Length);
+			string contextsCaption = ContextsCaption(concern);
+			string specificationsCaption = SpecificationsCaption(concern);
 
-			return String.Format("<h2 class=\"concern\">{0} specifications&nbsp;&nbsp;&nbsp;&nbsp;<span class=\"count\">{1} context(s), {2} specification(s)</span></h2>", concern.Name, concern.Contexts.Length, specificationCount);
+			return String.Format("<h2 class=\"concern\">{0} specifications&nbsp;&nbsp;&nbsp;&nbsp;<span class=\"count\">{1}, {2}</span></h2>", concern.Name, contextsCaption, specificationsCaption);
 		}
 
 		private static void RenderContexts(Context[] contexts, StringBuilder reportBuilder)
@@ -93,7 +115,8 @@ namespace SpecUnit.Report
 
 		public static string RenderContextHeader(Context context)
 		{
-			return String.Format("<h3 class=\"context\">{0}&nbsp;&nbsp;&nbsp;&nbsp;<span class=\"count\">{1} specification(s)</span></h3>", context.Name, context.Specifications.Length);
+			string specificationsCaption = SpecificationsCaption(context);
+			return String.Format("<h3 class=\"context\">{0}&nbsp;&nbsp;&nbsp;&nbsp;<span class=\"count\">{1}</span></h3>", context.Name, specificationsCaption);
 		}
 
 		public static string RenderSpecificationList(Specification[] specifications)
@@ -107,6 +130,12 @@ namespace SpecUnit.Report
 			}
 
 			return String.Format("<ul>\n{0}</ul>\n\n", specificationListBuilder);
+		}
+
+		private static void RenderHR(StringBuilder reportBuilder)
+		{
+			string hr = "<hr>\n\n";
+			reportBuilder.Append(hr);
 		}
 
 		private static string GetTemplate()
@@ -138,23 +167,63 @@ namespace SpecUnit.Report
 			return template;
 		}
 
-		public virtual void WriteReport(Assembly assemblyUnderTest)
+		public static string Pluralize(string caption, int count)
 		{
-			SpecificationDataset specificationDataset = SpecificationDataset.Build(assemblyUnderTest);
-
-			string generatedReport = Render(specificationDataset);
-
-			string reportFilePath = assemblyUnderTest.GetName().Name + ".html";
-
-			if (File.Exists(reportFilePath))
+			if (count > 1 || count == 0)
 			{
-				File.Delete(reportFilePath);
+				caption += "s";
 			}
 
-			TextWriter tw = new StreamWriter(reportFilePath);
+			return caption; 
+		}
 
-			tw.Write(generatedReport);
-			tw.Close();
+		private static string ConcernsCaption(Concern[] concerns)
+		{
+			int concernsCount = concerns.Length;
+			string concernsCaption = String.Format("{0} {1}", concernsCount, Pluralize("concern", concernsCount));
+			return concernsCaption;
+		}
+
+		private static string ContextsCaption(Concern[] concerns)
+		{
+			int contextCount = concerns.Sum(c => c.Contexts.Length);
+			return ContextsCaption(contextCount);
+		}
+
+		private static string ContextsCaption(Concern concern)
+		{
+			int contextCount = concern.Contexts.Length;
+			return ContextsCaption(contextCount);
+		}
+
+		private static string ContextsCaption(int contextCount)
+		{
+			string contextCaption = String.Format("{0} {1}", contextCount, Pluralize("context", contextCount));
+			return contextCaption;
+		}
+
+		private static string SpecificationsCaption(int specificationCount)
+		{
+			string specificationCaption = String.Format("{0} {1}", specificationCount, Pluralize("specification", specificationCount));
+			return specificationCaption;
+		}
+
+		private static string SpecificationsCaption(Concern[] concerns)
+		{
+			int specificationCount = concerns.Sum(c => c.Contexts.Sum(ctx => ctx.Specifications.Length));
+			return SpecificationsCaption(specificationCount);
+		}
+
+		private static string SpecificationsCaption(Concern concern)
+		{
+			int specificationCount = concern.Contexts.Sum(c => c.Specifications.Length);
+			return SpecificationsCaption(specificationCount);
+		}
+
+		private static string SpecificationsCaption(Context context)
+		{
+			int specificationCount = context.Specifications.Length;
+			return SpecificationsCaption(specificationCount);
 		}
 	}
 }

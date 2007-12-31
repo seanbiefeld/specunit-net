@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("SpecUnit.Specs.AssemblyUnderTest")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Dovetail")]
-[assembly: AssemblyProduct("SpecUnit.Specs.AssemblyUnderTest")]
-[assembly: AssemblyCopyright("Copyright © Dovetail 2007")]
+[assembly: AssemblyCompany("Scott Bellware")]
+[assembly: AssemblyProduct("SpecUnit")]
+[assembly: AssemblyCopyright("Copyright © Scott Bellware 2007")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("0.0.0.0")]
+[assembly: AssemblyFileVersion("0.0.0.0")]
