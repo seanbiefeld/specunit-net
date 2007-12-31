@@ -10,17 +10,11 @@ namespace SpecUnit.Report
 	public class SpecificationDataset
 	{
 		private readonly Assembly _assembly;
-		private Context[] _contexts = new Context[0];
 		private List<Concern> _concerns = new List<Concern>();
 
 		public Assembly Assembly
 		{
 			get { return _assembly; }
-		}
-
-		public Context[] Contexts
-		{
-			get { return _contexts; }
 		}
 
 		public Concern[] Concerns
@@ -64,23 +58,6 @@ namespace SpecUnit.Report
 					concern.AddContextFor(testFixtureType);
 				}
 			}
-		}
-
-		public void BuildContexts()
-		{
-			Type[] testFixtureTypes = _assembly.GetTypes().GetConcreteTestFixtureTypes();
-
-			List<Context> contexts = new List<Context>();
-			foreach (Type testFixtureType in testFixtureTypes)
-			{
-				Context context = new Context(testFixtureType);
-				contexts.Add(context);
-			}
-
-			_contexts =
-				(from c in contexts
-				 orderby c.Name
-				 select c).ToArray();
 		}
 
 		public static Type[] GetConcreteTestFixtureTypes(Type[] types)

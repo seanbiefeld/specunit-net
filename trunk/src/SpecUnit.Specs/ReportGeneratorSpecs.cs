@@ -9,6 +9,27 @@ namespace SpecUnit.Specs
 {
 	[TestFixture]
 	[Concern(typeof(ReportGenerator))]
+	public class when_rendering_the_report_title : ContextSpecification
+	{
+		private SpecificationDataset _specificationDataset;
+
+		protected override void Context()
+		{
+			Assembly assemblyUnderTest = typeof(A_fixture).Assembly;
+			_specificationDataset = SpecificationDataset.Build(assemblyUnderTest);
+		}
+
+		[Test]
+		[Observation]
+		public void should_include_the_dataset_name()
+		{
+			ReportGenerator.RenderTitle(_specificationDataset).ShouldContain(_specificationDataset.GetName());
+		}
+	}
+
+
+	[TestFixture]
+	[Concern(typeof(ReportGenerator))]
 	public class when_rendering_a_concern : ContextSpecification
 	{
 		private Concern _concern;
@@ -31,7 +52,7 @@ namespace SpecUnit.Specs
 		[Observation]
 		public void should_render_the_count_of_contexts_and_specifications()
 		{
-			ReportGenerator.RenderConcernHeader(_concern).ShouldContain("2 context(s), 4 specification(s)");
+			ReportGenerator.RenderConcernHeader(_concern).ShouldContain("2 contexts, 4 specifications");
 		}
 
 		[Test]
@@ -63,7 +84,7 @@ namespace SpecUnit.Specs
 		[Observation]
 		public void should_render_the_count_of_specifications_in_the_header()
 		{
-			ReportGenerator.RenderContextHeader(_context).ShouldContain("2 specification(s)");
+			ReportGenerator.RenderContextHeader(_context).ShouldContain("2 specifications");
 		}
 
 		[Observation]
@@ -96,7 +117,7 @@ namespace SpecUnit.Specs
 		[Observation]
 		public void should_render_the_count_of_specifications_in_the_header()
 		{
-			ReportGenerator.RenderContextHeader(_context).ShouldContain("2 specification(s)");
+			ReportGenerator.RenderContextHeader(_context).ShouldContain("2 specifications");
 		}
 
 		[Observation]
@@ -132,6 +153,63 @@ namespace SpecUnit.Specs
 		public void should_write_an_html_file_named_after_the_assembly_that_the_report_is_created_for()
 		{
 			File.Exists(_assemblyFilePath).ShouldBeTrue();
+		}
+	}
+
+	[TestFixture]
+	[Concern(typeof(ReportGenerator))]
+	public class when_pluralizing_a_caption_for_a_count_where_the_count_is_greater_than_one : ContextSpecification
+	{
+		private string _caption;
+
+		protected override void Context()
+		{
+			_caption = ReportGenerator.Pluralize("caption", 2);
+		}
+
+		[Test]
+		[Observation]
+		public void should_append__s__to_the_caption_to_indicate_the_plurality()
+		{
+			_caption.ShouldEqual("captions");
+		}
+	}
+
+	[TestFixture]
+	[Concern(typeof(ReportGenerator))]
+	public class when_pluralizing_a_caption_for_a_count_where_the_count_is_zero : ContextSpecification
+	{
+		private string _caption;
+
+		protected override void Context()
+		{
+			_caption = ReportGenerator.Pluralize("caption", 0);
+		}
+
+		[Test]
+		[Observation]
+		public void should_append__s__to_the_caption_to_indicate_the_plurality()
+		{
+			_caption.ShouldEqual("captions");
+		}
+	}
+
+	[TestFixture]
+	[Concern(typeof(ReportGenerator))]
+	public class when_pluralizing_a_caption_for_a_count_where_the_count_is_equal_to_one : ContextSpecification
+	{
+		private string _caption;
+
+		protected override void Context()
+		{
+			_caption = ReportGenerator.Pluralize("caption", 1);
+		}
+
+		[Test]
+		[Observation]
+		public void should_not_append__s__to_the_caption()
+		{
+			_caption.ShouldEqual("caption");
 		}
 	}
 }
