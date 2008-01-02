@@ -9,6 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpecUnit.Specs", "SpecUnit.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpecUnit.Specs.AssemblyUnderTest", "SpecUnit.Specs.AssemblyUnderTest\SpecUnit.Specs.AssemblyUnderTest.csproj", "{1466E65A-1C30-4BBD-96CB-D36D1BAAAAC6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D163404D-8220-4DCA-B3EF-DF403951BF14}"
+	ProjectSection(SolutionItems) = preProject
+		specunit-net.build = specunit-net.build
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

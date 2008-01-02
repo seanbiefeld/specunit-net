@@ -163,19 +163,20 @@ namespace SpecUnit.Specs
 		}
 	}
 
+	[TestFixture]
 	[Concern(typeof(ReportGenerator))]
 	public class when_writing_the_spec_report_for_an_assembly : ContextSpecification
 	{
 		private ReportGenerator _reportGenerator;
 		private Assembly _assembly;
-		private string _assemblyFilePath;
+		private string _reportFilePath;
 
 		protected override void Context()
 		{
 			_reportGenerator = new ReportGenerator();
 
 			_assembly = Assembly.GetExecutingAssembly();
-			_assemblyFilePath = _assembly.GetName().Name + ".dll";
+			_reportFilePath = _assembly.GetName().Name + ".html";
 		}
 
 		protected override void Because()
@@ -183,10 +184,19 @@ namespace SpecUnit.Specs
 			_reportGenerator.WriteReport(_assembly);
 		}
 
+		[Test]
 		[Observation]
 		public void should_write_an_html_file_named_for_the_assembly_that_the_report_is_created_for()
 		{
-			File.Exists(_assemblyFilePath).ShouldBeTrue();
+			File.Exists(_reportFilePath).ShouldBeTrue();
+		}
+
+		protected override void CleanUpContext()
+		{
+			if (File.Exists(_reportFilePath))
+			{
+				File.Delete(_reportFilePath);
+			}
 		}
 	}
 
