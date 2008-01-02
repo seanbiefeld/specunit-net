@@ -7,7 +7,7 @@ using SpecUnit.Specs.AssemblyUnderTest;
 namespace SpecUnit.Specs
 {
 	[Concern(typeof(Concern))]
-	public class when_creating_a_concern_for_a_test_fixture_type : ContextSpecification
+	public class when_creating_a_concern_based_on_a_type : ContextSpecification
 	{
 		private Concern _concern;
 
@@ -17,7 +17,7 @@ namespace SpecUnit.Specs
 		}
 
 		[Observation]
-		public void should_be_named_for_the_concern_type_s_name()
+		public void should_be_named_for_the_type()
 		{
 			_concern.Name.ShouldEqual("SomeConcern");
 		}
@@ -39,7 +39,7 @@ namespace SpecUnit.Specs
 		}
 
 		[Observation]
-		public void should_have_the_context()
+		public void should_have_the_context_in_its_list_of_contexts()
 		{
 			_concern.HasContextFor(typeof(Context_with_concern)).ShouldBeTrue();
 		}
@@ -56,40 +56,15 @@ namespace SpecUnit.Specs
 		}
 
 		[Observation]
-		public void should_not_have_the_concern()
+		public void should_not_have_the_context_in_its_list_of_contexts()
 		{
 			_concern.HasContextFor(typeof(Context_with_concern)).ShouldBeFalse();
 		}
 	}
 
-	[Concern(typeof(Concern))]
-	public class when_adding_multiple_contexts_of_the_same_concern_to_a_concern : ContextSpecification
-	{
-		private Concern _concern;
-
-		protected override void Context()
-		{
-			_concern = new Concern(typeof(SomeConcern));
-		}
-
-		protected override void Because( /* contexts belong to the same concern */ )
-		{
-			_concern.AddContextFor(typeof(Context_with_concern));
-			_concern.AddContextFor(typeof(Context_with_same_concern));
-		}
-
-		[Observation]
-		public void should_list_the_contexts_that_have_been_added()
-		{
-			_concern.Contexts.Length.ShouldEqual(2);
-			_concern.HasContextFor(typeof(Context_with_concern)).ShouldBeTrue();
-			_concern.HasContextFor(typeof(Context_with_same_concern)).ShouldBeTrue();
-		}
-	}
-
 	[TestFixture]
 	[Concern(typeof(Concern))]
-	public class when_adding_a_context_to_a_concern_where_the_context_does_not_belong_to_the_concern : ContextSpecification
+	public class when_adding_a_context_to_a_concern_that_it_does_not_belong_to : ContextSpecification
 	{
 		private Concern _concern;
 		private Type _testFixtureType;
@@ -116,7 +91,7 @@ namespace SpecUnit.Specs
 
 		[Test]
 		[Observation]
-		public void should_not_be_allowed()
+		public void should_cause_an_error()
 		{
 			_exception.ShouldContainErrorMessage(String.Format("{0} does not belong to the {1} concern.", _testFixtureType.Name, "SomeConcern"));
 		}

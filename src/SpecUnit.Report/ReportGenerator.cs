@@ -32,6 +32,7 @@ namespace SpecUnit.Report
 			StringBuilder reportBuilder = new StringBuilder();
 
 			RenderTitle(specificationDataset, reportBuilder);
+			RenderHR(reportBuilder);
 
 			Concern[] concerns =
 				(from c in specificationDataset.Concerns
@@ -42,7 +43,7 @@ namespace SpecUnit.Report
 
 			string reportBody = reportBuilder.ToString();
 
-			return String.Format(GetTemplate(), specificationDataset.GetName(), reportBody);
+			return String.Format(GetTemplate(), specificationDataset.Name, reportBody);
 		}
 
 		private static void RenderTitle(SpecificationDataset specificationDataset, StringBuilder reportBuilder)
@@ -51,9 +52,8 @@ namespace SpecUnit.Report
 			string contextsCaption = ContextsCaption(specificationDataset.Concerns);
 			string specificationsCaption = SpecificationsCaption(specificationDataset.Concerns);
 
-			string title = String.Format("<h1>{0}&nbsp;&nbsp;&nbsp;&nbsp;<span class=\"count\">{1}, {2}, {3}</span></h1>\n\n", specificationDataset.GetName(), concernsCaption, contextsCaption, specificationsCaption);
+			string title = String.Format("<h1>{0}&nbsp;&nbsp;&nbsp;&nbsp;<span class=\"count\">{1}, {2}, {3}</span></h1>", specificationDataset.Name, concernsCaption, contextsCaption, specificationsCaption);
 			reportBuilder.Append(title);
-			RenderHR(reportBuilder);
 		}
 
 		public static string RenderTitle(SpecificationDataset specificationDataset)
@@ -110,6 +110,7 @@ namespace SpecUnit.Report
 
 				string specificationList = RenderSpecificationList(context.Specifications);
 				reportBuilder.Append(specificationList);
+				reportBuilder.Append("\n\n");
 			}
 		}
 
@@ -129,7 +130,7 @@ namespace SpecUnit.Report
 				specificationListBuilder.Append(specificationListItem);
 			}
 
-			return String.Format("<ul>\n{0}</ul>\n\n", specificationListBuilder);
+			return String.Format("<ul>\n{0}</ul>", specificationListBuilder);
 		}
 
 		private static void RenderHR(StringBuilder reportBuilder)

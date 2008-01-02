@@ -21,12 +21,74 @@ namespace SpecUnit.Specs
 
 		[Test]
 		[Observation]
-		public void should_include_the_dataset_name()
+		public void should_include_the_specification_dataset_name()
 		{
-			ReportGenerator.RenderTitle(_specificationDataset).ShouldContain(_specificationDataset.GetName());
+			ReportGenerator.RenderTitle(_specificationDataset).ShouldContain(_specificationDataset.Name);
+		}
+
+		[Test]
+		[Observation]
+		public void should_inlude_the_counts_of_the_concerns()
+		{
+			ReportGenerator.RenderTitle(_specificationDataset).ShouldContain("2 concerns");
+		}
+
+		[Test]
+		[Observation]
+		public void should_inlude_the_counts_of_the_contexts()
+		{
+			ReportGenerator.RenderTitle(_specificationDataset).ShouldContain("3 contexts");
+		}
+
+		[Test]
+		[Observation]
+		public void should_inlude_the_counts_of_the_specifications()
+		{
+			ReportGenerator.RenderTitle(_specificationDataset).ShouldContain("5 specifications");
+		}
+
+		[Test]
+		[Observation]
+		public void should_render_the_name_in_an_H1()
+		{
+			ReportGenerator.RenderTitle(_specificationDataset).ShouldBeSurroundedWith("<h1", "</h1>");
 		}
 	}
 
+	[TestFixture]
+	[Concern(typeof(ReportGenerator))]
+	public class when_rendering_a_concern_header : ContextSpecification
+	{
+		private Concern _concern;
+
+		protected override void Context()
+		{
+			_concern = new Concern(typeof(SomeConcern));
+			_concern.AddContextFor(typeof(Context_with_concern));
+			_concern.AddContextFor(typeof(Context_with_same_concern));
+		}
+
+		[Test]
+		[Observation]
+		public void should_include_the_counts_of_the_contexts()
+		{
+			ReportGenerator.RenderConcernHeader(_concern).ShouldContain("2 contexts");
+		}
+
+		[Test]
+		[Observation]
+		public void should_include_the_counts_of_the_specifications()
+		{
+			ReportGenerator.RenderConcernHeader(_concern).ShouldContain("4 specifications");
+		}
+
+		[Test]
+		[Observation]
+		public void should_render_the_name_in_an_H2()
+		{
+			ReportGenerator.RenderConcernHeader(_concern).ShouldBeSurroundedWith("<h2", "</h2>");
+		}
+	}
 
 	[TestFixture]
 	[Concern(typeof(ReportGenerator))]
@@ -43,20 +105,6 @@ namespace SpecUnit.Specs
 
 		[Test]
 		[Observation]
-		public void should_render_the_name_in_an_H2()
-		{
-			ReportGenerator.RenderConcernHeader(_concern).ShouldBeSurroundedWith("<h2", "</h2>");
-		}
-
-		[Test]
-		[Observation]
-		public void should_render_the_count_of_contexts_and_specifications()
-		{
-			ReportGenerator.RenderConcernHeader(_concern).ShouldContain("2 contexts, 4 specifications");
-		}
-
-		[Test]
-		[Observation]
 		public void should_render_its_contexts()
 		{
 			ReportGenerator.RenderConcern(_concern).ShouldContain("Context with concern");
@@ -65,19 +113,13 @@ namespace SpecUnit.Specs
 
 	[TestFixture]
 	[Concern(typeof(ReportGenerator))]
-	public class when_rendering_the_context_for_a_concern : ContextSpecification
+	public class when_rendering_a_context_header : ContextSpecification
 	{
 		private Context _context;
 
 		protected override void Context()
 		{
 			_context = SpecUnit.Report.Context.Build(typeof(TestFixture));
-		}
-
-		[Observation]
-		public void should_render_the_name_in_an_H3()
-		{
-			ReportGenerator.RenderContextHeader(_context).ShouldBeSurroundedWith("<h3", "</h3>");
 		}
 
 		[Test]
@@ -88,11 +130,9 @@ namespace SpecUnit.Specs
 		}
 
 		[Observation]
-		public void should_render_specifications_as_a_bulletted_list()
+		public void should_render_the_name_in_an_H3()
 		{
-			string expectedText = "<ul>\n\t<li>TestCase1</li>\n\t<li>TestCase2</li>\n</ul>";
-
-			ReportGenerator.RenderSpecificationList(_context.Specifications).ShouldContain(expectedText);
+			ReportGenerator.RenderContextHeader(_context).ShouldBeSurroundedWith("<h3", "</h3>");
 		}
 	}
 
@@ -107,25 +147,19 @@ namespace SpecUnit.Specs
 			_context = SpecUnit.Report.Context.Build(typeof(TestFixture));
 		}
 
+		[Test]
 		[Observation]
-		public void should_render_the_name_in_an_H3()
+		public void should_render_each_specification()
 		{
-			ReportGenerator.RenderContextHeader(_context).ShouldBeSurroundedWith("<h3", "</h3>");
+			ReportGenerator.RenderSpecificationList(_context.Specifications).ShouldContain("TestCase1");
+			ReportGenerator.RenderSpecificationList(_context.Specifications).ShouldContain("TestCase2");
 		}
 
 		[Test]
 		[Observation]
-		public void should_render_the_count_of_specifications_in_the_header()
-		{
-			ReportGenerator.RenderContextHeader(_context).ShouldContain("2 specifications");
-		}
-
-		[Observation]
 		public void should_render_specifications_as_a_bulletted_list()
 		{
-			string expectedText = "<ul>\n\t<li>TestCase1</li>\n\t<li>TestCase2</li>\n</ul>";
-
-			ReportGenerator.RenderSpecificationList(_context.Specifications).ShouldContain(expectedText);
+			ReportGenerator.RenderSpecificationList(_context.Specifications).ShouldBeSurroundedWith("<ul>\n\t<li>", "</li>\n</ul>");
 		}
 	}
 
@@ -150,7 +184,7 @@ namespace SpecUnit.Specs
 		}
 
 		[Observation]
-		public void should_write_an_html_file_named_after_the_assembly_that_the_report_is_created_for()
+		public void should_write_an_html_file_named_for_the_assembly_that_the_report_is_created_for()
 		{
 			File.Exists(_assemblyFilePath).ShouldBeTrue();
 		}

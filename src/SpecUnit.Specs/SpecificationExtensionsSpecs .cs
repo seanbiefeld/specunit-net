@@ -199,7 +199,7 @@ namespace SpecUnit.Specs
 	}
 
 	[Concern(typeof(SpecificationExtensions), "GetException extention")]
-	public class when_throwing_an_exception_from_a_delegate
+	public class when_a_delegate_throws_an_exception
 	{
 		private MethodThatThrows _method;
 		private Exception _exception;
@@ -213,7 +213,7 @@ namespace SpecUnit.Specs
 		}
 
 		[Observation]
-		public void should_observation()
+		public void should_retrieve_the_exception()
 		{
 			_exception.ShouldBeOfType(typeof (ApplicationException));
 		}
