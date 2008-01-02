@@ -7,29 +7,6 @@ using SpecUnit.Specs.AssemblyUnderTest;
 
 namespace SpecUnit.Specs
 {
-	[Concern(typeof(SpecificationDataset))]
-	public class when_creating_a_dataset_for_an_assembly : ContextSpecification
-	{
-		private SpecificationDataset _specificationDataset;
-		private Assembly _assemblyUnderTest;
-
-		protected override void Context()
-		{
-			_assemblyUnderTest = typeof(A_fixture).Assembly;
-		}
-
-		protected override void Because(/* the assembly under test is named SpecUnit.Specs.AssemblyUnderTest */)
-		{
-			_specificationDataset = new SpecificationDataset(_assemblyUnderTest);
-		}
-
-		[Observation]
-		public void should_be_named_for_the_file_stem_of_the_name_of_the_assembly()
-		{
-			_specificationDataset.GetName().ShouldEqual("SpecUnit.Specs");
-		}
-	}
-
 	[TestFixture]
 	[Concern(typeof(SpecificationDataset))]
 	public class when_building_a_dataset_for_an_assembly : ContextSpecification
@@ -53,10 +30,17 @@ namespace SpecUnit.Specs
 		{
 			_specificationDataset.Concerns.Length.ShouldBeGreaterThan(0);
 		}
+
+		[Test]
+		[Observation]
+		public void should_be_named_for_the_file_stem_of_the_of_the_assembly_name()
+		{
+			_specificationDataset.Name.ShouldEqual("SpecUnit.Specs");
+		}
 	}
 
 	[Concern(typeof(SpecificationDataset))]
-	public class when_collecting_concserns_from_an_assembly : ContextSpecification
+	public class when_collecting_concerns_from_an_assembly : ContextSpecification
 	{
 		private SpecificationDataset _specificationDataset;
 

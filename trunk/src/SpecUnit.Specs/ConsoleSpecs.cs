@@ -119,17 +119,11 @@ namespace SpecUnit.Specs
 
             _output = new StringBuilder();
             System.Console.SetOut(new StringWriter(Output));
-
-            SetUpCase();
         }
 
         public void Restore_Console_Output_To_Original_Device()
         {
-            TearDownCase();
             System.Console.SetOut(_saveOut);
         }
-
-        public virtual void SetUpCase() { }
-        public virtual void TearDownCase() { }
     }
 }

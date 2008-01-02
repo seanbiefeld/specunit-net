@@ -6,10 +6,9 @@ using SpecUnit.Report;
 namespace SpecUnit.Specs
 {
 	[Concern(typeof(Specification))]
-	public class when_a_method_has_a_test_fixture_attribute : ContextSpecification
+	public class when_a_creating_a_specification_for_a_method : ContextSpecification
 	{
-		[Observation]
-		public void should_be_a_test_method()
+		[Observation] public void should_be_a_method_that_has_an_attribute_in_the_TestAttribute_family()
 		{
 			MethodInfo methodInfo = (MethodInfo)MethodInfo.GetCurrentMethod();
 

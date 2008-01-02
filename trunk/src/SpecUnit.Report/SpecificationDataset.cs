@@ -22,15 +22,18 @@ namespace SpecUnit.Report
 			get { return _concerns.ToArray(); }
 		}
 
+		public string Name
+		{
+			get { return GetName(_assembly.GetName().Name); }
+		}
+
 		public SpecificationDataset(Assembly assembly)
 		{
 			_assembly = assembly;
 		}
 
-		public string GetName()
+		private string GetName(string assemblyName)
 		{
-			string assemblyName = _assembly.GetName().Name;
-
 			int endPosition = assemblyName.LastIndexOf(".");
 
 			return assemblyName.Substring(0, endPosition);
