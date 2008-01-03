@@ -106,12 +106,14 @@
 			+ '.' + svnRevision }"
 			overwrite="true" />
 
-    <setenv name="dynamic-version" value="${dynamic-version}"/>
+    <!--<setenv name="dynamic-version" value="${dynamic-version}"/>-->
 
     <echo message="Version set to ${dynamic-version}"/>
   </target>
 
   <target name="_update-assembly-version">
+    <echo message="Setting version to ${dynamic-version}"/>
+
     <asminfo output="${src-dir}\CommonAssemblyInfo.cs" language="CSharp" verbose="true">
       <imports>
         <import namespace="System.Reflection" />
