@@ -95,7 +95,7 @@
   <target name="_get-current-version">
     <getsvnrevision propertyName="svnRevision" svnExePath="${svn}" />
 
-    <exec program="${svn}" commandline="update ${version-file}"/>
+    <!--<exec program="${svn}" commandline="update ${version-file}"/>-->
 
     <xmlpeek file="${version-file}" property="static-version" xpath="//version"/>
 
