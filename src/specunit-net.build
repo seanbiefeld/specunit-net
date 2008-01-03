@@ -36,8 +36,11 @@
   <target name = "package-build">
     <zip zipfile="${build-dir}\SpecUnit.zip">
       <fileset basedir="${build-dir}">
-        <include name="*.dll" />
-        <include name="*.exe" />
+        <include name="SpecUnit.dll" />
+        <include name="nunit.framework.dll" />
+        <include name="SpecUnit.Report.exe" />
+      </fileset>
+      <fileset basedir="${doc-dir}">
         <include name="*.html" />
       </fileset>
     </zip>
@@ -86,9 +89,7 @@
   <target name="_copy-release-artifacts-to-build-dir">
 		<copy todir="${build-dir}" overwrite="true">
       <fileset basedir="${src-dir}\SpecUnit.Specs\bin\Release\">
-        <include name="SpecUnit.dll" />
-        <include name="SpecUnit.Report.exe" />
-        <include name="nunit.framework.dll" />
+        <include name="*.*" />
       </fileset>
 		</copy>
 	</target>
@@ -106,6 +107,11 @@
     <exec program="${spec-report}" verbose="true">
       <arg value="${build-dir}\SpecUnit.Specs.dll" />
     </exec>
+    <move todir="${doc-dir}" overwrite="true">
+      <fileset>
+        <include name="*.html" />
+      </fileset>
+    </move>
   </target>
 
 </project>
