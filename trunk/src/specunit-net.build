@@ -102,7 +102,7 @@
     <property name="dynamic-version"
 			value="${ int::to-string(version::get-major(version::parse(static-version)))
 			+ '.' + int::to-string(version::get-minor(version::parse(static-version)))
-			+ '.' + int::to-string(version::get-build(version::parse(static-version)))
+			+ '.' + '*'
 			+ '.' + svnRevision }"
 			overwrite="true" />
 
