@@ -23,7 +23,7 @@
   <target name="test" depends="build-debug, _test" description="Compile and run tests" />
   <target name="generate-spec-report" depends="test, _generate-spec-report" description="Generate the specification report" />
   <target name="update-version" depends="_get-current-version, _update-assembly-version, _revert-assembly-version" description="Get current SVN revision and assign it to assembly metadata" />
-  <target name="release" depends="build-release, _generate-spec-report" description="Build and package a release" />
+  <target name="release" depends="_get-current-version, _update-assembly-version, build-release, _revert-assembly-version, _generate-spec-report" description="Build and package a release" />
 
   <target name="default">
     <echo message="Hi, how are you?" />
@@ -102,13 +102,11 @@
     <property name="dynamic-version"
 			value="${ int::to-string(version::get-major(version::parse(static-version)))
 			+ '.' + int::to-string(version::get-minor(version::parse(static-version)))
-			+ '.' + '*'
-			+ '.' + svnRevision }"
+			+ '.' + svnRevision
+			+ '.' + '*' }"
 			overwrite="true" />
 
-    <!--<setenv name="dynamic-version" value="${dynamic-version}"/>-->
-
-    <echo message="Version set to ${dynamic-version}"/>
+    <echo message="Current revision is ${dynamic-version}"/>
   </target>
 
   <target name="_update-assembly-version">
