@@ -14,6 +14,6 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyCompanyAttribute("Scott Bellware")]
 [assembly: AssemblyCopyrightAttribute("Copyright © Scott Bellware 2007")]
-[assembly: AssemblyVersionAttribute("0.1.0.15")]
-[assembly: AssemblyFileVersionAttribute("0.1.0.15")]
+[assembly: AssemblyVersionAttribute("0.0.*")]
+[assembly: AssemblyFileVersionAttribute("0.0.*")]
 
