@@ -20,10 +20,16 @@
 	<!--External targets-->
   <target name="build-debug" depends="_clean-build-dir, _make-build-dir, _compile-debug, _copy-debug-artifacts-to-build-dir" />
   <target name="build-release" depends="_clean-build-dir, _make-build-dir, _compile-release, _copy-release-artifacts-to-build-dir" />
-  <target name="test" depends="build-debug, _test" description="Compile and run tests" />
+  <target name="test" depends="build-debug, _test, tc_test" description="Compile and run tests" />
   <target name="generate-spec-report" depends="test, _generate-spec-report" description="Generate the specification report" />
   <target name="release" depends="build-release, _generate-spec-report, package-build" description="Build and package a release" />
 
+  <target name="tc_test">
+    <exec program="${teamcity.dotnet.nunitlauncher2.0}">
+      <arg file="SpecUnit.Specs.dll"/>
+    </exec>
+  </target>
+  
   <target name="hello">
     <echo message="Hi, how are you?" />
   </target>
