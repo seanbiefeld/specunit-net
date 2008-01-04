@@ -26,7 +26,7 @@
 
   <target name="tc_test">
     <exec program="${teamcity.dotnet.nunitlauncher2.0}">
-      <arg file="SpecUnit.Specs.dll"/>
+      <arg file="..\build\SpecUnit.Specs.dll"/>
     </exec>
   </target>
   
