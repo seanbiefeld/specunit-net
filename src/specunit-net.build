@@ -21,9 +21,9 @@
   <target name="build-debug" depends="_clean-build-dir, _make-build-dir, _compile-debug, _copy-debug-artifacts-to-build-dir" />
   <target name="build-release" depends="_clean-build-dir, _make-build-dir, _compile-release, _copy-release-artifacts-to-build-dir" />
   <target name="test" depends="build-debug, _test" description="Compile and run tests" />
-  <target name="tc-build" depends="build-debug, _test, _tc-test" description="Compile and run tests" />
   <target name="generate-spec-report" depends="test, _generate-spec-report" description="Generate the specification report" />
-  <target name="release" depends="build-release, _generate-spec-report, package-build" description="Build and package a release" />
+  <target name="release" depends="build-release, _generate-spec-report, _package-build" description="Build and package a release" />
+  <target name="tc-build" depends="build-debug, _test, _tc-test, _generate-spec-report, _package-build" description="Compile and run tests" />
 
   <target name="hello">
     <echo message="Hi, how are you?" />
@@ -34,15 +34,13 @@
   </target>
 
   <!--Package the buld-->
-  <target name = "package-build">
+  <target name = "_package-build">
     <zip zipfile="${build-dir}\SpecUnit.zip">
       <fileset basedir="${build-dir}">
         <include name="SpecUnit.dll" />
         <include name="nunit.framework.dll" />
         <include name="SpecUnit.Report.exe" />
-      </fileset>
-      <fileset basedir="${doc-dir}">
-        <include name="*.html" />
+        <include name="SpecUnit.Specs.html" />
       </fileset>
     </zip>
   </target>
@@ -95,7 +93,7 @@
 		</copy>
 	</target>
 
-	<!--Test internal target-->
+	<!--Test-->
 	<target name="_test">
 		<exec program="${nunitconsole}" verbose="true">
 			<arg value="${build-dir}/SpecUnit.Specs.dll" />
@@ -108,9 +106,9 @@
     <exec program="${spec-report}" verbose="true">
       <arg value="${build-dir}\SpecUnit.Specs.dll" />
     </exec>
-    <move todir="${doc-dir}" overwrite="true">
+    <move todir="${build-dir}" overwrite="true">
       <fileset>
-        <include name="*.html" />
+        <include name="SpecUnit.Specs.html" />
       </fileset>
     </move>
   </target>
