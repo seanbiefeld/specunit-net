@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project name="specunit-net" default="default" xmlns="http://nant.sf.net/release/0.85/nant.xsd">
+<project name="specunit-net" default="hello" xmlns="http://nant.sf.net/release/0.85/nant.xsd">
 
 	<!--Main paths-->
   <property name="root-dir" value="${path::get-full-path('..')}" />
@@ -24,7 +24,7 @@
   <target name="generate-spec-report" depends="test, _generate-spec-report" description="Generate the specification report" />
   <target name="release" depends="build-release, _generate-spec-report, package-build" description="Build and package a release" />
 
-  <target name="default">
+  <target name="hello">
     <echo message="Hi, how are you?" />
   </target>
 
