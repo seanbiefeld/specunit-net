@@ -6,6 +6,7 @@ using SpecUnit.Specs.AssemblyUnderTest;
 
 namespace SpecUnit.Specs
 {
+	[TestFixture]
 	[Concern(typeof(Context))]
 	public class when_a_test_fixture_class_is_a_concern
 	{
@@ -116,6 +117,51 @@ namespace SpecUnit.Specs
 		public void they_should_be_equal()
 		{
 			_contextClass1.ShouldEqual(_contextClass2);
+		}
+	}
+
+	[TestFixture]
+	[Concern(typeof(Context))]
+	public class when_a_context_behaves_like_another_context : ContextSpecification
+	{
+		private Context _context;
+
+		protected override void Context()
+		{
+			_context = SpecUnit.Report.Context.Build(typeof(Context_with_behaves_like));
+		}
+
+		[Test]
+		[Observation]
+		public void should_have_a_subclass_whose_name_begins_with__behaves_like__()
+		{
+			_context.BehavesLike.ShouldEqual("a common context");
+		}
+	}
+
+	[TestFixture]
+	[Concern(typeof(Context))]
+	public class when_a_context_does_not_behave_like_another_context : ContextSpecification
+	{
+		private Context _context;
+
+		protected override void Context()
+		{
+			_context = SpecUnit.Report.Context.Build(typeof(Context_with_concern));
+		}
+
+		[Test]
+		[Observation]
+		public void should_not_have_a_subclass_whose_name_begins_with__behaves_like__()
+		{
+			_context.BehavesLike.ShouldBeNull();
+		}
+
+		[Test]
+		[Observation]
+		public void may_not_have_a_subclass()
+		{
+			SpecUnit.Report.Context.Build(typeof(Context_with_subclass)).BehavesLike.ShouldBeNull();
 		}
 	}
 }

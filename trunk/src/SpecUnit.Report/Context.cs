@@ -31,6 +31,11 @@ namespace SpecUnit.Report
 			get { return _specifications.ToArray(); }
 		}
 
+		public string BehavesLike
+		{
+			get { return _testFixtureType.BehavesLike(); }
+		}
+
 		public Context(Type type)
 		{
 			AssertIsTestFixture(type);
@@ -101,12 +106,7 @@ namespace SpecUnit.Report
 
 		public bool Equals(Context other)
 		{
-			return this._testFixtureType == other.TestFixtureType;
-		}
-
-		private void AddSpecification(Specification specification)
-		{
-			_specifications.Add(specification);
+			return _testFixtureType == other.TestFixtureType;
 		}
 
 		public bool HasSpecificationFor(string testCaseName)
@@ -121,6 +121,25 @@ namespace SpecUnit.Report
 		{
 			bool do_not_look_for_attribute_on_base_types = true;
 			return type.GetCustomAttributes(typeof(TestFixtureAttribute), do_not_look_for_attribute_on_base_types).Length != 0;
+		}
+
+		public static string BehavesLike(this Type type)
+		{
+			Type baseType = type.BaseType;
+
+			if (baseType == null)
+			{
+				return null;
+			}
+
+			if (baseType.Name.ToLowerInvariant().StartsWith("behaves_like") == false)
+			{
+				return null;
+			}
+
+			string name = baseType.Name.Remove(0, "behaves_like".Length);
+
+			return SpecificationName.GetName(name);
 		}
 	}
 }

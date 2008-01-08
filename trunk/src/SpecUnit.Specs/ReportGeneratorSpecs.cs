@@ -37,7 +37,7 @@ namespace SpecUnit.Specs
 		[Observation]
 		public void should_inlude_the_counts_of_the_contexts()
 		{
-			ReportGenerator.RenderTitle(_specificationDataset).ShouldContain("3 contexts");
+			ReportGenerator.RenderTitle(_specificationDataset).ShouldContain("5 contexts");
 		}
 
 		[Test]
