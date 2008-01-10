@@ -30,6 +30,16 @@
 
   <target name="hello">
     <echo message="Hi, how are you?" />
+    <echo message="You need to tell the build system which target to run" />
+    <echo message="" />
+    <echo message="To get started, try: nant test" />
+    <echo message="" />
+    <echo message="Here are a few more helpful targets found in ${path::get-full-path(path::get-file-name(project::get-buildfile-uri()))}" />
+    <echo message="=> test" />
+    <echo message="=> generate-spec-report" />
+    <echo message="=> build-debug" />
+    <echo message="=> build-release" />
+    <echo message="=> package" />
   </target>
 
   <target name="print-system-time">

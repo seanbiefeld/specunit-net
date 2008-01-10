@@ -6,16 +6,19 @@ using SpecUnit.Specs.AssemblyUnderTest;
 
 namespace SpecUnit.Specs
 {
-	[Concern(typeof(Concern))]
-	public class when_creating_a_concern_based_on_a_type : ContextSpecification
+	public abstract class behaves_like_context_with_concern : ContextSpecification
 	{
-		private Concern _concern;
+		protected Concern _concern;
 
 		protected override void Context()
 		{
 			_concern = new Concern(typeof(SomeConcern));
 		}
+	}
 
+	[Concern(typeof(Concern))]
+	public class when_creating_a_concern_based_on_a_type : behaves_like_context_with_concern
+	{
 		[Observation]
 		public void should_be_named_for_the_type()
 		{
@@ -24,15 +27,8 @@ namespace SpecUnit.Specs
 	}
 
 	[Concern(typeof(Concern))]
-	public class after_adding_a_context_for_a_type : ContextSpecification
+	public class after_adding_a_context_for_a_type : behaves_like_context_with_concern
 	{
-		private Concern _concern;
-
-		protected override void Context()
-		{
-			_concern = new Concern(typeof(SomeConcern));
-		}
-
 		protected override void Because()
 		{
 			_concern.AddContextFor(typeof(Context_with_concern));
@@ -46,15 +42,8 @@ namespace SpecUnit.Specs
 	}
 
 	[Concern(typeof(Concern))]
-	public class when_a_context_does_not_belong_to_a_concern : ContextSpecification
+	public class when_a_context_does_not_belong_to_a_concern : behaves_like_context_with_concern
 	{
-		private Concern _concern;
-
-		protected override void Context()
-		{
-			_concern = new Concern(typeof(SomeConcern));
-		}
-
 		[Observation]
 		public void should_not_have_the_context_in_its_list_of_contexts()
 		{
