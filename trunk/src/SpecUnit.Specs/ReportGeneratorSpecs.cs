@@ -138,6 +138,49 @@ namespace SpecUnit.Specs
 
 	[TestFixture]
 	[Concern(typeof(ReportGenerator))]
+	public class when_rendering_a_context_that_behaves_like_another_context : ContextSpecification
+	{
+		private Context _context;
+
+		protected override void Context()
+		{
+			_context = SpecUnit.Report.Context.Build(typeof(Context_with_behaves_like));
+		}
+
+		[Test]
+		[Observation]
+		public void should_indicate_that_it_behaves_like_another_context()
+		{
+			ReportGenerator.RenderContext(_context).ShouldContain("<p class=\"behaves_like\">behaves like: a common context</p>");
+		}
+	}
+
+	[TestFixture]
+	[Concern(typeof(ReportGenerator))]
+	public class when_rendering_a_context_that_does_not_behaves_like_another_context : ContextSpecification
+	{
+		private Context _context;
+
+		protected override void Context()
+		{
+			_context = SpecUnit.Report.Context.Build(typeof(Context_with_concern));
+		}
+
+		[Test]
+		[Observation]
+		public void should_indicate_that_it_behaves_like_another_context()
+		{
+			string contextRendering = ReportGenerator.RenderContext(_context);
+			
+			if (contextRendering.Contains("Behaves like") == true)
+			{
+				Assert.Fail("Should not contain \"behaves like\"");	
+			}
+		}
+	}
+
+	[TestFixture]
+	[Concern(typeof(ReportGenerator))]
 	public class when_rendering_a_context : ContextSpecification
 	{
 		private Context _context;

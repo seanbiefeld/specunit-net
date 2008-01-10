@@ -104,14 +104,35 @@ namespace SpecUnit.Report
 		{
 			foreach (Context context in contexts)
 			{
-				string specificationClassHeader = RenderContextHeader(context);
-				specificationClassHeader = String.Format("{0}\n", specificationClassHeader);
-				reportBuilder.Append(specificationClassHeader);
+				reportBuilder.Append(RenderContext(context));
+			}
+		}
 
-				string specificationList = RenderSpecificationList(context.Specifications);
-				reportBuilder.Append(specificationList);
+		public static string RenderContext(Context context)
+		{
+			StringBuilder reportBuilder = new StringBuilder();
+
+			reportBuilder.Append("\n");
+			string contextHeader = RenderContextHeader(context);
+			reportBuilder.Append(contextHeader);
+
+			string behavesLike = context.BehavesLike;
+			if (behavesLike != null)
+			{
+				reportBuilder.Append(RenderBehavesLike(behavesLike));
 				reportBuilder.Append("\n\n");
 			}
+
+			string specificationList = RenderSpecificationList(context.Specifications);
+			reportBuilder.Append(specificationList);
+			reportBuilder.Append("\n\n");
+
+			return reportBuilder.ToString();
+		}
+
+		private static string RenderBehavesLike(string behavesLike)
+		{
+			return String.Format("<p class=\"behaves_like\">behaves like: {0}</p>", behavesLike);
 		}
 
 		public static string RenderContextHeader(Context context)
@@ -152,6 +173,13 @@ namespace SpecUnit.Report
 
 			.count {{
 				color: LightGrey;
+			}}
+
+			.behaves_like {{
+				color: DarkGrey;
+				font-weight: bold;
+				margin-left: 20px;
+				margin-top: -10px;
 			}}
 
 			hr {{

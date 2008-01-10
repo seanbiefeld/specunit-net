@@ -167,12 +167,5 @@ namespace SpecUnit
 
 			return exception;
 		}
-
-		[Obsolete("This method will be moved to another namespace")]
-		public static void ShouldEqualSqlDate(this DateTime actual, DateTime expected)
-		{
-			TimeSpan timeSpan = actual - expected;
-			Assert.Less(Math.Abs(timeSpan.TotalMilliseconds), 3);
-		}
 	}
 }
