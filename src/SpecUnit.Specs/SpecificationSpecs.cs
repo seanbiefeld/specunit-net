@@ -6,11 +6,24 @@ using SpecUnit.Report;
 namespace SpecUnit.Specs
 {
 	[Concern(typeof(Specification))]
+	public class when_a_test_method_is_a_specificaition : ContextSpecification
+	{
+		[Observation]
+		public void should_have_an_attribute_in_the_SpecificationAttribute_family()
+		{
+			MethodInfo methodInfo = (MethodInfo) MethodInfo.GetCurrentMethod();
+
+			Specification.IsTestMethod(methodInfo).ShouldBeTrue();
+		}
+	}
+
+	[Concern(typeof(Specification))]
 	public class when_a_creating_a_specification_for_a_method : ContextSpecification
 	{
-		[Observation] public void should_be_a_method_that_has_an_attribute_in_the_TestAttribute_family()
+		[Observation]
+		public void should_be_a_method_that_has_an_attribute_in_the_SpecificationAttribute_family()
 		{
-			MethodInfo methodInfo = (MethodInfo)MethodInfo.GetCurrentMethod();
+			MethodInfo methodInfo = (MethodInfo) MethodInfo.GetCurrentMethod();
 
 			Specification.IsTestMethod(methodInfo).ShouldBeTrue();
 		}

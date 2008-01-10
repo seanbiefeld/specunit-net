@@ -44,7 +44,7 @@ namespace SpecUnit.Specs
 		[Observation]
 		public void should_inlude_the_counts_of_the_specifications()
 		{
-			ReportGenerator.RenderTitle(_specificationDataset).ShouldContain("5 specifications");
+			ReportGenerator.RenderTitle(_specificationDataset).ShouldContain("4 specifications");
 		}
 
 		[Test]
@@ -119,14 +119,14 @@ namespace SpecUnit.Specs
 
 		protected override void Context()
 		{
-			_context = SpecUnit.Report.Context.Build(typeof(TestFixture));
+			_context = SpecUnit.Report.Context.Build(typeof(Context_with_concern));
 		}
 
 		[Test]
 		[Observation]
-		public void should_render_the_count_of_specifications_in_the_header()
+		public void should_render_the_count_of_specifications()
 		{
-			ReportGenerator.RenderContextHeader(_context).ShouldContain("2 specifications");
+			ReportGenerator.RenderContextHeader(_context).ShouldContain("3 specifications");
 		}
 
 		[Observation]
@@ -187,15 +187,15 @@ namespace SpecUnit.Specs
 
 		protected override void Context()
 		{
-			_context = SpecUnit.Report.Context.Build(typeof(TestFixture));
+			_context = SpecUnit.Report.Context.Build(typeof(Context_with_concern));
 		}
 
 		[Test]
 		[Observation]
 		public void should_render_each_specification()
 		{
-			ReportGenerator.RenderSpecificationList(_context.Specifications).ShouldContain("TestCase1");
-			ReportGenerator.RenderSpecificationList(_context.Specifications).ShouldContain("TestCase2");
+			ReportGenerator.RenderSpecificationList(_context.Specifications).ShouldContain("should jump when I say how hi");
+			ReportGenerator.RenderSpecificationList(_context.Specifications).ShouldContain("should jump if I say how hi");
 		}
 
 		[Test]
