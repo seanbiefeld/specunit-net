@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace SpecUnit
 {
-	public class ObservationAttribute : TestAttribute
+	public class ObservationAttribute : SpecificationAttribute
 	{
 	}
 }

@@ -10,6 +10,7 @@ namespace SpecUnit.Specs
 	[Concern(typeof(Context))]
 	public class when_a_test_fixture_class_is_a_concern
 	{
+		[Test]
 		[Observation]
 		public void should_be_attributed_with_the_ConcernAttribute()
 		{

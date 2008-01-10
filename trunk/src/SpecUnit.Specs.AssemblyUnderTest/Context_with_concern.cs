@@ -5,19 +5,19 @@ namespace SpecUnit.Specs.AssemblyUnderTest
 	[Concern(typeof(SomeConcern))]
 	public class Context_with_concern
 	{
-		[Test]
+		[Observation]
 		public void should_jump()
 		{
 
 		}
 
-		[Test]
+		[Observation]
 		public void should_jump_when_I_say_how_high()
 		{
 
 		}
 
-		[Test]
+		[Observation]
 		public void should_jump_if_I_say_how_high()
 		{
 
@@ -27,7 +27,7 @@ namespace SpecUnit.Specs.AssemblyUnderTest
 	[Concern(typeof(SomeConcern))]
 	public class Context_with_same_concern
 	{
-		[Test]
+		[Observation]
 		public void should_quack()
 		{
 
