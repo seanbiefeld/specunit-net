@@ -61,6 +61,10 @@
     <Compile Include="SpecificationSpecs.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AssemblyWithoutPeriodInName\AssemblyWithoutPeriodInName.csproj">
+      <Project>{A14482B6-54C4-450C-A57B-1AE95DBC2FBC}</Project>
+      <Name>AssemblyWithoutPeriodInName</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SpecUnit.Report\SpecUnit.Report.csproj">
       <Project>{CF5E3274-CDF3-4491-95C8-A298E5E5D245}</Project>
       <Name>SpecUnit.Report</Name>

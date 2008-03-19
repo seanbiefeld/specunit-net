@@ -12,16 +12,16 @@ namespace SpecUnit.Specs
 	public class when_building_a_dataset_for_an_assembly : ContextSpecification
 	{
 		private SpecificationDataset _specificationDataset;
-		private Assembly _assemblyUnderTest;
+		private Assembly _assembly;
 
 		protected override void Context()
 		{
-			_assemblyUnderTest = typeof(A_fixture).Assembly;
+			_assembly = typeof(A_fixture).Assembly;
 		}
 
 		protected override void Because()
 		{
-			_specificationDataset = SpecificationDataset.Build(_assemblyUnderTest);
+			_specificationDataset = SpecificationDataset.Build(_assembly);
 		}
 
 		[Test]
@@ -30,15 +30,51 @@ namespace SpecUnit.Specs
 		{
 			_specificationDataset.Concerns.Length.ShouldBeGreaterThan(0);
 		}
+	}
+
+	[TestFixture]
+	[Concern(typeof(SpecificationDataset))]
+	public class when_naming_a_specification_dataset_for_an_assembly_that_has_a_period_in_its_name : ContextSpecification
+	{
+		private SpecificationDataset _specificationDataset;
+		private Assembly _assembly;
+
+		protected override void Context()
+		{
+			_assembly = typeof(A_fixture).Assembly;
+			_specificationDataset = SpecificationDataset.Build(_assembly);
+		}
 
 		[Test]
 		[Observation]
-		public void should_be_named_for_the_file_stem_of_the_of_the_assembly_name()
+		public void should_be_named_for_the_part_of_stem_of_the_assembly_filename_that_comes_before_the_last_period()
 		{
 			_specificationDataset.Name.ShouldEqual("SpecUnit.Specs");
 		}
 	}
 
+	[TestFixture]
+	[Concern(typeof(SpecificationDataset))]
+	public class when_naming_a_specification_dataset_for_an_assembly_that_does_not_have_a_period_in_its_name : ContextSpecification
+	{
+		private SpecificationDataset _specificationDataset;
+		private Assembly _assembly;
+
+		protected override void Context()
+		{
+			_assembly = typeof(ClassFromAssemblyWithoutPeriodInName).Assembly;
+			_specificationDataset = SpecificationDataset.Build(_assembly);
+		}
+
+		[Test]
+		[Observation]
+		public void should_be_named_for_the_stem_of_the_assembly_filename()
+		{
+			_specificationDataset.Name.ShouldEqual("AssemblyWithoutPeriodInName");
+		}
+	}
+
+	[TestFixture]
 	[Concern(typeof(SpecificationDataset))]
 	public class when_collecting_concerns_from_an_assembly : ContextSpecification
 	{
