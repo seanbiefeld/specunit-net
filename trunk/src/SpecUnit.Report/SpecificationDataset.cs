@@ -32,11 +32,15 @@ namespace SpecUnit.Report
 			_assembly = assembly;
 		}
 
-		private string GetName(string assemblyName)
+		private static string GetName(string assemblyName)
 		{
-			int endPosition = assemblyName.LastIndexOf(".");
+			int lastPeriodPosition = assemblyName.LastIndexOf(".");
+			if (lastPeriodPosition >= 0)
+			{
+				assemblyName = assemblyName.Substring(0, lastPeriodPosition);
+			}
 
-			return assemblyName.Substring(0, endPosition);
+			return assemblyName;
 		}
 
 		public void BuildConcerns()
