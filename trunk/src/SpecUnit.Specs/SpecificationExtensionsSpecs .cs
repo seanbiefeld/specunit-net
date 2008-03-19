@@ -70,10 +70,17 @@ namespace SpecUnit.Specs
 			o2.ShouldNotBeTheSameAs(o1);
 		}
 
+		[Obsolete("Use ShouldBe() method instead. This method will be deleted in a future revision.")]
 		[Specification]
 		public void should_allow__ShouldBeOfType__to_be_used_in_place_of__Assert_IsInstanceOfType__()
 		{
 			"some string".ShouldBeOfType(typeof(String));
+		}
+
+		[Specification]
+		public void should_allow__ShouldBe__to_be_used_in_place_of__Assert_IsInstanceOfType__()
+		{
+			"some string".ShouldBe(typeof(String));
 		}
 
 		[Specification]

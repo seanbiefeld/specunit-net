@@ -57,6 +57,11 @@ namespace SpecUnit
 			Assert.IsInstanceOfType(expected, actual);
 		}
 
+		public static void ShouldBe(this object actual, Type expected)
+		{
+			Assert.IsInstanceOfType(expected, actual);
+		}
+
 		public static void ShouldNotBeOfType(this object actual, Type expected)
 		{
 			Assert.IsNotInstanceOfType(expected, actual);
