@@ -1,0 +1,21 @@
+#summary SpecUnit .NET's feature roadmap.
+
+= v0.2 =
+
+Possible release: Week ending 3/25/08
+
+*Features*
+
+ * Command line switches for filtering by value of ConcernAttribute and CateoryAttribute
+
+*Bug Fixes*
+
+ * Exception thrown by report generator when spec assembly name does not contain a "."
+
+= v0.3 =
+
+Possible release: Week ending 4/1/08
+
+*Features*
+
+ * Allow context to have multiple Concern attributes
