@@ -5,7 +5,10 @@ namespace SpecUnit.Report
 {
 	public class Specification : SpecificationName
 	{
+		private static readonly bool defaultWarnOfContextNaming = true;
+
 		private readonly string _testCaseName;
+		private readonly bool _warnOfContextNaming = defaultWarnOfContextNaming;
 
 		public string TestCaseName
 		{
@@ -17,16 +20,19 @@ namespace SpecUnit.Report
 			get { return GetName(); }
 		}
 
-		public Specification(string testCaseName)
+		public Specification(string testCaseName) : this (testCaseName, defaultWarnOfContextNaming) {}
+
+		public Specification(string testCaseName, bool warnOfContextNaming)
 		{
 			_testCaseName = testCaseName;
+			_warnOfContextNaming = warnOfContextNaming;
 		}
 
 		private string GetName()
 		{
 			string name = GetName(_testCaseName);
 
-			if (name.IndexOf(" when ") != -1 || name.IndexOf(" if ") != -1)
+			if (_warnOfContextNaming == true && (name.IndexOf(" when ") != -1 || name.IndexOf(" if ") != -1))
 			{
 				name += " -- WARNING: Specifications with the words \"if\" or \"when\" may be contexts";
 			}

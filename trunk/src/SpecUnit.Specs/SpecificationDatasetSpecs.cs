@@ -4,26 +4,31 @@ using System.Reflection;
 using NUnit.Framework;
 using SpecUnit.Report;
 using SpecUnit.Specs.AssemblyUnderTest;
+using System.Linq;
 
 namespace SpecUnit.Specs
 {
-	[TestFixture]
-	[Concern(typeof(SpecificationDataset))]
-	public class when_building_a_dataset_for_an_assembly : ContextSpecification
+	public abstract class behaves_like_dataset_with_contexts : ContextSpecification
 	{
-		private SpecificationDataset _specificationDataset;
-		private Assembly _assembly;
+		protected SpecificationDataset _specificationDataset;
+		protected Assembly _assembly;
 
-		protected override void Context()
+		protected override void SharedContext()
 		{
 			_assembly = typeof(A_fixture).Assembly;
 		}
 
-		protected override void Because()
+		protected override void Context()
 		{
 			_specificationDataset = SpecificationDataset.Build(_assembly);
 		}
+	}
 
+	[TestFixture]
+	[Concern(typeof(SpecificationDataset))]
+	public class when_building_a_dataset_for_an_assembly
+		: behaves_like_dataset_with_contexts
+	{
 		[Test]
 		[Observation]
 		public void should_collect_and_build_the_assembly_s_concerns()
@@ -34,17 +39,9 @@ namespace SpecUnit.Specs
 
 	[TestFixture]
 	[Concern(typeof(SpecificationDataset))]
-	public class when_naming_a_specification_dataset_for_an_assembly_that_has_a_period_in_its_name : ContextSpecification
+	public class when_naming_a_specification_dataset_for_an_assembly_that_has_a_period_in_its_name
+		: behaves_like_dataset_with_contexts
 	{
-		private SpecificationDataset _specificationDataset;
-		private Assembly _assembly;
-
-		protected override void Context()
-		{
-			_assembly = typeof(A_fixture).Assembly;
-			_specificationDataset = SpecificationDataset.Build(_assembly);
-		}
-
 		[Test]
 		[Observation]
 		public void should_be_named_for_the_part_of_stem_of_the_assembly_filename_that_comes_before_the_last_period()
@@ -57,8 +54,8 @@ namespace SpecUnit.Specs
 	[Concern(typeof(SpecificationDataset))]
 	public class when_naming_a_specification_dataset_for_an_assembly_that_does_not_have_a_period_in_its_name : ContextSpecification
 	{
-		private SpecificationDataset _specificationDataset;
-		private Assembly _assembly;
+		protected SpecificationDataset _specificationDataset;
+		protected Assembly _assembly;
 
 		protected override void Context()
 		{
@@ -76,25 +73,58 @@ namespace SpecUnit.Specs
 
 	[TestFixture]
 	[Concern(typeof(SpecificationDataset))]
-	public class when_collecting_concerns_from_an_assembly : ContextSpecification
+	public class when_collecting_concerns_from_an_assembly
+		: behaves_like_dataset_with_contexts
 	{
-		private SpecificationDataset _specificationDataset;
-
 		protected override void Context()
 		{
-			Assembly assemblyUnderTest = typeof(Context_with_concern).Assembly;
-			_specificationDataset = new SpecificationDataset(assemblyUnderTest);
+			_specificationDataset = new SpecificationDataset(_assembly);
 		}
 
-		protected override void Because( /* there are three classes in the assembly with two unique concerns */ )
+		protected override void Because(/* there are three classes in the assembly with two unique concerns */)
 		{
 			_specificationDataset.BuildConcerns();
 		}
 
+		[Test]
 		[Observation]
 		public void should_include_one_concern_for_each_unique_concern_found()
 		{
 			_specificationDataset.Concerns.Length.ShouldEqual(2);
+		}
+	}
+
+	[TestFixture]
+	[Concern(typeof(SpecificationDataset), "collecting concerns")]
+	public class when_filtering_based_on_a_concern_name
+		: behaves_like_dataset_with_contexts
+	{
+		protected override void Context()
+		{
+			_specificationDataset = new SpecificationDataset(_assembly);
+		}
+
+		protected override void Because(/* there are three classes in the assembly with two unique concerns */)
+		{
+			_specificationDataset.BuildConcerns("SomeConcern");
+		}
+
+		[Test]
+		[Observation]
+		public void should_include_contexts_whose_conerns_not_match_the_filter()
+		{
+			_specificationDataset.Concerns[0].Name.ShouldEqual("SomeConcern");
+		}
+
+		[Test]
+		[Observation]
+		public void should_exclude_contexts_whose_conerns_do_not_match_the_filter()
+		{
+			var concerns = _specificationDataset.Concerns.Where(c => c.Name == "SomeOtherConcern");
+
+			Concern concern = concerns.FirstOrDefault();
+
+			concern.ShouldBeNull();
 		}
 	}
 
@@ -132,7 +162,7 @@ namespace SpecUnit.Specs
 		}
 
 		[Observation]
-		public void should_include_concrete_classes_with_the_TestFixture_attribute()
+		public void should_include_concrete_classes_attributed_with_an_attribute_in_the_TestFixtureAttribute_family()
 		{
 			_datasetTypes[0].ShouldEqual(typeof(A_fixture));
 		}

@@ -114,6 +114,20 @@ namespace SpecUnit
 			StringAssert.Contains(expected, actual);
 		}
 
+		public static void ShouldNotContain(this string actual, string expected)
+		{
+			try
+			{
+				StringAssert.Contains(expected, actual);
+			}
+			catch (AssertionException)
+			{
+				return;
+			}
+
+			throw new AssertionException(String.Format("\"{0}\" should not contain \"{1}\".", actual, expected));
+		}
+
 		public static string ShouldBeEqualIgnoringCase(this string actual, string expected)
 		{
 			StringAssert.AreEqualIgnoringCase(expected, actual);

@@ -47,6 +47,7 @@ namespace SpecUnit.Specs
 	}
 
 	[Concern(typeof(Specification))]
+	[TestFixture]
 	public class when_a_specification_name_contains__if__ : ContextSpecification
 	{
 		private Specification specification;
@@ -57,9 +58,29 @@ namespace SpecUnit.Specs
 		}
 
 		[Observation]
+		[Test]
 		public void should_add_a_warning_to_the_specification_name_indicating_that_the_specification_may_be_a_context()
 		{
 			specification.Name.ShouldContain(" -- WARNING: Specifications with the words \"if\" or \"when\" may be contexts");
+		}
+	}
+
+	[Concern(typeof(Specification))]
+	[TestFixture]
+	public class when_warnings_are_turned_off : ContextSpecification
+	{
+		private Specification specification;
+
+		protected override void Because(/* the specification name includes "if" and context naming warnings are off*/)
+		{
+			specification = new Specification("should_ask_how_high_if_I_say_jump", false);
+		}
+
+		[Observation]
+		[Test]
+		public void should_add_a_warning_to_the_specification_name_indicating_that_the_specification_may_be_a_context()
+		{
+			specification.Name.ShouldNotContain(" -- WARNING: Specifications with the words \"if\" or \"when\" may be contexts");
 		}
 	}
 }
