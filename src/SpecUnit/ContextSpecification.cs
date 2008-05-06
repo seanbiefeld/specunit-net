@@ -19,6 +19,7 @@ namespace SpecUnit
 		[SetUp]
 		public void SetUp()
 		{
+			SharedContext();
 			Context();
 			Because();
 		}
@@ -40,6 +41,7 @@ namespace SpecUnit
 			Assert.Ignore(message);
 		}
 
+		protected virtual void SharedContext() { System.Diagnostics.Debug.WriteLine("WARNING: Shared context setup not implemented"); }
 		protected virtual void Context() { }
 		protected virtual void CleanUpContext() { }
 		protected virtual void Context_BeforeAllSpecs() { }

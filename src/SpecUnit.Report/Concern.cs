@@ -52,6 +52,11 @@ namespace SpecUnit.Report
 			return type.GetCustomAttributes(typeof(ConcernAttribute), true).Length != 0;
 		}
 
+		public static bool WasFound(this Concern concern)
+		{
+			return concern != null;
+		}
+
 		public static string GetConcernName(this Type type)
 		{
 			object[] attributes = type.GetCustomAttributes(typeof (ConcernAttribute), true);

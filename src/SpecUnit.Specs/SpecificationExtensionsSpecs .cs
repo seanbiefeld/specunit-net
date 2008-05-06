@@ -159,6 +159,23 @@ namespace SpecUnit.Specs
 		}
 
 		[Specification]
+		public void should_allow__ShouldNotContain__to_be_used_in_place_of__StringAssert_NotContains__()
+		{
+			"some string".ShouldNotContain("xx");
+		}
+
+		[Specification]
+		public void should_raise_an_assertion_exception_when__ShouldNotContain__fails()
+		{
+			typeof (AssertionException).ShouldBeThrownBy(
+				delegate
+					{
+						"some string".ShouldNotContain("me");
+					})
+					.ShouldContainErrorMessage("\"some string\" should not contain \"me\".");
+		}
+
+		[Specification]
 		public void should_allow__ShouldBeEqualIgnoringCase__to_be_used_in_place_of__StringAssert_AreEqualIgnoringCase__()
 		{
 			"some string".ShouldBeEqualIgnoringCase("Some String");

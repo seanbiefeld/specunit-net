@@ -45,26 +45,43 @@ namespace SpecUnit.Report
 
 		public void BuildConcerns()
 		{
+			BuildConcerns(null);
+		}
+
+		public void BuildConcerns(string concernFilter)
+		{
 			Type[] testFixtureTypes = _assembly.GetTypes().GetConcreteTestFixtureTypes();
 
 			foreach (Type testFixtureType in testFixtureTypes)
 			{
 				if (testFixtureType.HasConcern())
 				{
-					Concern concern =
-						(from c in _concerns
-						where c.Name == testFixtureType.GetConcernName()
-						select c).FirstOrDefault();
+					Concern concern = GetConcernFromBuiltConcerns(testFixtureType);
 
-					if (concern == null)
+					if (concern.WasFound() == false)
 					{
 						concern = new Concern(testFixtureType.GetConcernName());
+
+						if (concernFilter != null && concern.Name != concernFilter)
+						{
+							continue;
+						}
+
 						_concerns.Add(concern);
 					}
 
 					concern.AddContextFor(testFixtureType);
 				}
 			}
+		}
+
+		private Concern GetConcernFromBuiltConcerns(Type testFixtureType)
+		{
+			Concern concern =
+				(from c in _concerns
+				           	where c.Name == testFixtureType.GetConcernName()
+			select c).FirstOrDefault();
+			return concern;
 		}
 
 		public static Type[] GetConcreteTestFixtureTypes(Type[] types)
